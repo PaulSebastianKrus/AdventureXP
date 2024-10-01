@@ -6,17 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class ActivityController {
 
     @Autowired
     private ActivityService activityService;
 
 
-    @GetMapping("/activity")
+    @GetMapping("/api/activity")
     public ResponseEntity<List<Activity>> getActivities() {
         // Assuming Activity is a model class representing an activity
         List<Activity> activities = activityService.getAllActivities();
@@ -24,6 +25,9 @@ public class ActivityController {
         // Return the list of activities with a 200 OK status
         return ResponseEntity.ok(activities);
     }
+
+
+
 
 
 }
