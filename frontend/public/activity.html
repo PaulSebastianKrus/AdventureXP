@@ -58,28 +58,6 @@
         }
     }
 
-    function displayActivities(activities) {
-        const activitiesContainer = document.getElementById('activities-container');
-        activitiesContainer.innerHTML = ''; // Clear previous content
-
-        activities.forEach(activity => {
-            const activityDiv = document.createElement('a'); // Use an anchor tag
-            activityDiv.classList.add('activity');
-            activityDiv.href = `seeActivity.html?activity_id=${activity.activity_id}`; // Update link for details page
-
-            activityDiv.innerHTML = `
-                <h2>${activity.activityName}</h2>
-                <p><strong>Description:</strong> ${activity.description}</p>
-                <p><strong>Weight Limit:</strong> ${activity.weightLimit} kg</p>
-                <p><strong>Age Limit:</strong> ${activity.ageLimit} years</p>
-                <p><strong>Season:</strong> ${activity.season}</p>
-                <button class="delete-button" onclick="confirmDeleteActivity(${activity.activity_id}); event.stopPropagation();">Delete</button>
-            `;
-
-            activitiesContainer.appendChild(activityDiv);
-        });
-    }
-
     function confirmDeleteActivity(activityId) {
         const userConfirmed = confirm('Are you sure you want to delete this activity?');
 
@@ -96,13 +74,48 @@
 
             if (response.ok) {
                 alert('Activity deleted successfully!');
-                fetchActivities();
+                fetchActivities(); // Refresh the activities list
             } else {
                 throw new Error('Failed to delete activity: ' + response.statusText);
             }
         } catch (error) {
             document.getElementById('error-message').innerText = 'Failed to delete activity: ' + error.message;
         }
+    }
+
+    // Modify the displayActivities function to include event listener for delete buttons
+    function displayActivities(activities) {
+        const activitiesContainer = document.getElementById('activities-container');
+        activitiesContainer.innerHTML = ''; // Clear previous content
+
+        activities.forEach(activity => {
+            const activityDiv = document.createElement('a'); // Create an anchor tag for the activity
+            activityDiv.classList.add('activity');
+            activityDiv.href = `seeActivity.html?activity_id=${activity.activity_id}`; // Link for details page
+
+            activityDiv.innerHTML = `
+            <h2>${activity.activityName}</h2>
+            <p><strong>Description:</strong> ${activity.description}</p>
+            <p><strong>Weight Limit:</strong> ${activity.weightLimit} kg</p>
+            <p><strong>Age Limit:</strong> ${activity.ageLimit} years</p>
+            <p><strong>Season:</strong> ${activity.season}</p>
+        `;
+
+            // Create delete button and add it to the activity div
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete-button');
+            deleteButton.innerText = 'Delete';
+
+            // Add click event listener for delete button
+            deleteButton.onclick = (event) => {
+                event.stopPropagation(); // Prevent the click event from propagating to the activity link
+                event.preventDefault(); // Prevent any default action that might cause navigation
+                confirmDeleteActivity(activity.activity_id);
+            };
+
+            activityDiv.appendChild(deleteButton);
+            activitiesContainer.appendChild(activityDiv);
+        });
     }
 
     // Fetch activities on page load
