@@ -19,8 +19,9 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
     this.jdbcTemplate = jdbcTemplate;
 }
 
-    public void addActivity(Activity activity, Long activity_id, String name, String description, Long weightLimit, Long ageLimit, String season) {
-        String insertQuery = "INSERT INTO activities (activity_id, name, description, weightlimit, agelimit, season) VALUES (?, ?, ?, ?, ?, ?)";
+    public void addActivity(Activity activity) {
+        String insertQuery = "INSERT INTO activities (name, description, weightlimit, agelimit, season) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(insertQuery, activity.getActivityName(), activity.getDescription(), activity.getWeightLimit(), activity.getAgeLimit(), activity.getSeason());
     }
 
 
@@ -41,6 +42,24 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
             activity.setSeason(rs.getString("season"));
             return activity;
         });
+    }
+
+    public Activity updateActivity(Activity activity) {
+        String query = "UPDATE activities SET name = ?, description = ?, weightlimit = ?, agelimit = ?, season = ?, WHERE = activity_id";
+        int rowsUpdated = jdbcTemplate.update(query, activity.getActivityName(), activity.getDescription(), activity.getWeightLimit(), activity.getAgeLimit(), activity.getSeason(), activity.getActivity_id());
+        if (rowsUpdated> 0) {
+            return activity;
+        }
+        return null;
+    }
+
+    public Activity updateActivityDescription(Activity activity) {
+        String query = "UPDATE activities SET description = ?, WHERE = activity_id";
+        int rowsUpdated = jdbcTemplate.update(query, activity.getDescription(), activity.getActivity_id());
+        if (rowsUpdated> 0) {
+            return activity;
+        }
+        return null;
     }
 
 

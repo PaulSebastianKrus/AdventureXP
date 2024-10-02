@@ -13,9 +13,9 @@ public class ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
 
-public void addActivity(Activity activity, Long activity_id, String name, String description, Long weightLimit, Long ageLimit, String season) {
-    activityRepository.addActivity(activity, activity_id, name, description,weightLimit, ageLimit, season);
-}
+    public void addActivity(Activity activity) {
+        activityRepository.addActivity(activity);
+    }
 
 public void deleteActivity(Long activity_id) {
     activityRepository.deleteActivity(activity_id);
@@ -24,5 +24,11 @@ public void deleteActivity(Long activity_id) {
     public List<Activity> getAllActivities() {
         return activityRepository.getAllActivities();
     }
+
+    public Activity updateActivity(Activity activity) {
+    return activityRepository.updateActivity(activity);
+    }
+
+
 
 }
