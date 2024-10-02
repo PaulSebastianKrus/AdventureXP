@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Activity</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        form { background: #f4f4f4; padding: 20px; margin: 20px 0; }
+        label, input, button { display: block; margin: 10px 0; }
+    </style>
+</head>
+<body>
+<h1>Add New Activity</h1>
+<form id="activity-form">
+    <label for="activityName">Activity Name:</label>
+    <input type="text" id="activityName" name="activityName" required>
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" required>
+
+    <label for="weightLimit">Weight Limit:</label>
+    <input type="number" id="weightLimit" name="weightLimit" required>
+
+    <label for="ageLimit">Age Limit:</label>
+    <input type="number" id="ageLimit" name="ageLimit" required>
+
+    <label for="season">Season:</label>
+    <input type="text" id="season" name="season" required>
+
+    <button type="button" onclick="submitForm()">Add Activity</button>
+</form>
+<div id="response-message"></div>
+
+<script>
+    async function submitForm() {
+        const activity = {
+            activityName: document.getElementById('activityName').value,
+            description: document.getElementById('description').value,
+            weightLimit: document.getElementById('weightLimit').value,
+            ageLimit: document.getElementById('ageLimit').value,
+            season: document.getElementById('season').value
+        };
+
+        try {
+            const response = await fetch('http://localhost:3000/api/activity/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(activity)
+            });
+
+            if (response.ok) {
+                document.getElementById('response-message').innerText = "Activity added successfully!";
+
+                // Redirect to the activities page after a successful submission
+                setTimeout(() => {
+                    window.location.href = '/activity'; // Redirect to the activity page
+                }, 1000); // Adjust the delay as needed
+            } else {
+                document.getElementById('response-message').innerText = "Failed to add activity: " + response.statusText;
+            }
+        } catch (error) {
+            document.getElementById('response-message').innerText = "Error: " + error.message;
+        }
+    }
+</script>
+</body>
+</html>

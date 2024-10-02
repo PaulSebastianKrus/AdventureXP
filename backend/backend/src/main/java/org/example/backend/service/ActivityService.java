@@ -13,9 +13,9 @@ public class ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
 
-public void addActivity(Activity activity, Long activity_id, String name, String description, Long weightLimit, Long ageLimit, String season) {
-    activityRepository.addActivity(activity, activity_id, name, description,weightLimit, ageLimit, season);
-}
+    public void addActivity(Activity activity) {
+        activityRepository.addActivity(activity);
+    }
 
 public void deleteActivity(Long activity_id) {
     activityRepository.deleteActivity(activity_id);
@@ -24,5 +24,30 @@ public void deleteActivity(Long activity_id) {
     public List<Activity> getAllActivities() {
         return activityRepository.getAllActivities();
     }
+
+    public Activity updateActivity(Activity activity) {
+        return activityRepository.updateActivity(activity);
+    }
+
+    public Activity updateActivityName(Activity activity) {
+    return activityRepository.updateActivityName(activity);
+    }
+    public Activity updateActivityDescription(Activity activity) {
+    return activityRepository.updateActivityDescription(activity);
+    }
+    public Activity updateActivityWeightLimit(Activity activity) {
+    return activityRepository.updateActivityWeightLimit(activity);
+    }
+    public Activity updateActivityAgeLimit(Activity activity) {
+    return activityRepository.updateActivityAgeLimit(activity);
+    }
+    public Activity updateActivitySeason(Activity activity) {
+    return activityRepository.updateActivitySeason(activity);
+    }
+    public Activity getActivityById(Long id) {
+        return activityRepository.getActivityById(id);
+    }
+
+
 
 }
