@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .activity-details {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        .input-field {
+            margin-bottom: 10px;
+        }
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .editable {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="activity-details" id="activity-details"></div>
+<div class="error" id="error-message"></div>
+
+<script>
+    let currentActivityId;
+    let activityData; // Store the entire activity data for updating
+
+    async function fetchActivityDetails(activityId) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/activity/${activityId}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            activityData = await response.json();
+            currentActivityId = activityData.activity_id; // Assuming activity_id is the correct field
+            displayActivityDetails(activityData);
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to load activity details: ' + error.message;
+        }
+    }
+
+    function displayActivityDetails(activity) {
+        const detailsContainer = document.getElementById('activity-details');
+        detailsContainer.innerHTML = `
+        <h2>Edit Activity Details</h2>
+        <div class="input-field">
+            <label for="activityName">Activity Name:</label>
+            <div>
+                <span id="activityNameDisplay">${activity.activityName}</span>
+                <button onclick="toggleEdit('activityName')">Edit</button>
+            </div>
+            <input type="text" id="activityName" class="editable" value="${activity.activityName}" style="display:none;">
+            <button onclick="saveChanges('activityName')" class="editable" style="display:none;">Save</button>
+        </div>
+        <div class="input-field">
+            <label for="description">Description:</label>
+            <div>
+                <span id="descriptionDisplay">${activity.description}</span>
+                <button onclick="toggleEdit('description')">Edit</button>
+            </div>
+            <textarea id="description" class="editable" style="display:none;">${activity.description}</textarea>
+            <button onclick="saveChanges('description')" class="editable" style="display:none;">Save</button>
+        </div>
+        <div class="input-field">
+            <label for="weightLimit">Weight Limit (kg):</label>
+            <div>
+                <span id="weightLimitDisplay">${activity.weightLimit}</span>
+                <button onclick="toggleEdit('weightLimit')">Edit</button>
+            </div>
+            <input type="number" id="weightLimit" class="editable" value="${activity.weightLimit}" style="display:none;">
+            <button onclick="saveChanges('weightLimit')" class="editable" style="display:none;">Save</button>
+        </div>
+        <div class="input-field">
+            <label for="ageLimit">Age Limit (years):</label>
+            <div>
+                <span id="ageLimitDisplay">${activity.ageLimit}</span>
+                <button onclick="toggleEdit('ageLimit')">Edit</button>
+            </div>
+            <input type="number" id="ageLimit" class="editable" value="${activity.ageLimit}" style="display:none;">
+            <button onclick="saveChanges('ageLimit')" class="editable" style="display:none;">Save</button>
+        </div>
+        <div class="input-field">
+            <label for="season">Season:</label>
+            <div>
+                <span id="seasonDisplay">${activity.season}</span>
+                <button onclick="toggleEdit('season')">Edit</button>
+            </div>
+            <input type="text" id="season" class="editable" value="${activity.season}" style="display:none;">
+            <button onclick="saveChanges('season')" class="editable" style="display:none;">Save</button>
+        </div>
+    `;
+    }
+
+
+
+    function toggleEdit(field) {
+        const displayElement = document.getElementById(`${field}Display`);
+        const inputElement = document.getElementById(field);
+        const saveButton = document.querySelector(`button[onclick="saveChanges('${field}')"]`);
+
+        // Check if the displayElement or inputElement is null
+        if (displayElement && inputElement && saveButton) {
+            // Show the editable field and hide the display field
+            displayElement.style.display = 'none';
+            inputElement.style.display = 'block';
+            saveButton.style.display = 'inline-block'; // Show save button
+        } else {
+            console.error(`One of the elements is null: ${field}Display, ${field}, or save button`);
+        }
+    }
+
+
+    async function saveChanges(field) {
+        const updatedValue = document.getElementById(field).value;
+
+        // Update the displayed value
+        document.getElementById(`${field}Display`).innerText = updatedValue;
+
+        // Hide the input field and show the display field
+        document.getElementById(field).style.display = 'none';
+        document.getElementById(`${field}Display`).style.display = 'block';
+
+        // Show edit button again and hide save button
+        const editButton = document.querySelector(`div:has(#${field}Display) > button:nth-child(2)`);
+        editButton.style.display = 'inline-block'; // Show edit button again
+
+        // Prepare the updated activity data
+        const activityData = {
+            [field]: updatedValue // Only send the updated field
+        };
+
+        // Send the updated value to the server
+        try {
+            const response = await fetch(`http://localhost:3000/api/activity/${currentActivityId}`, {
+                method: 'POST', // Use POST method
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(activityData) // Send the activity data as JSON
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to save changes: ' + error.message;
+        }
+    }
+
+
+    // Extract activity_id from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const activityId = urlParams.get('activity_id');
+
+    // Fetch activity details if activityId is found
+    if (activityId) {
+        fetchActivityDetails(activityId);
+    } else {
+        document.getElementById('error-message').innerText = 'No activity ID provided.';
+    }
+</script>
+</body>
+</html>

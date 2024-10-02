@@ -15,11 +15,17 @@ app.get('/activity', (req, res) => {
     const __dirname = path.dirname(new URL(import.meta.url).pathname); // Get the current directory
     res.sendFile(path.join(__dirname, '..', 'public', 'activity.html')); // Corrected path
 });
-// Serve activity.html at the /activity/add route
+// Serve addActivity.html at the /activity/add route
 app.get('/activity/add', (req, res) => {
     const __dirname = path.dirname(new URL(import.meta.url).pathname); // Get the current directory
     res.sendFile(path.join(__dirname, '..', 'public', 'addActivity.html')); // Corrected path
 });
+// Serve seeActivity.html at the /activity/add route
+app.get('/activity/:id', (req, res) => {
+    const __dirname = path.dirname(new URL(import.meta.url).pathname); // Get the current directory
+    res.sendFile(path.join(__dirname, '..', 'public', 'seeActivity.html')); // Corrected path
+});
+
 
 
 
@@ -34,6 +40,71 @@ app.get('/api/activity', async (req, res) => {
         res.status(500).send('Error fetching activities: ' + error.message);
     }
 });
+
+// Fetch a specific activity by ID
+app.get('/api/activity/:id', async (req, res) => {
+    const activityId = req.params.id;
+    try {
+        const response = await fetch(`http://localhost:8080/api/activity/${activityId}`); // Adjust according to your Spring Boot API
+        const activity = await response.json();
+        res.json(activity);
+    } catch (error) {
+        res.status(500).send('Error fetching activity: ' + error.message);
+    }
+});
+
+// Handle POST request to add an activity
+app.post('/api/activity/add', async (req, res) => {
+    try {
+        const activityData = req.body; // Get the activity data from the request body
+
+        // Make sure to pass the activity data in the request to the Spring Boot backend
+        const postResponse = await fetch('http://localhost:8080/api/activity/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Set the content type to JSON
+            },
+            body: JSON.stringify(activityData) // Send the activity data as JSON
+        });
+
+        if (postResponse.ok) {
+            res.status(201).send('Activity added successfully.'); // Send a success response
+        } else {
+            res.status(postResponse.status).send('Failed to add activity: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error adding activity: ' + error.message);
+    }
+});
+
+
+
+// Handle POST request to update an activity
+app.post('/api/activity/:id', async (req, res) => {
+    try {
+        const activityId = req.params.id; // Get the activity ID from the request parameters
+        const activityData = req.body; // Get the activity data from the request body
+
+        // Make sure to pass the activity ID in the request to the Spring Boot backend
+        const postResponse = await fetch(`http://localhost:8080/api/activity/${activityId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Set the content type to JSON
+            },
+            body: JSON.stringify(activityData) // Send the activity data as JSON
+        });
+
+        if (postResponse.ok) {
+            res.status(200).send('Activity updated successfully.'); // Send a success response
+        } else {
+            res.status(postResponse.status).send('Failed to update activity: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error updating activity: ' + error.message);
+    }
+});
+
+
 
 // Handle DELETE request to delete an activity
 app.delete('/api/activity/:id', async (req, res) => {
@@ -51,6 +122,11 @@ app.delete('/api/activity/:id', async (req, res) => {
     } catch (error) {
         res.status(500).send('Error deleting activity: ' + error.message);
     }
+
+
+
+
+
 });
 
 

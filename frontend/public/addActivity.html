@@ -43,7 +43,7 @@
         };
 
         try {
-            const response = await fetch('http://localhost:8080/api/activity/add', {
+            const response = await fetch('http://localhost:3000/api/activity/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,6 +53,11 @@
 
             if (response.ok) {
                 document.getElementById('response-message').innerText = "Activity added successfully!";
+
+                // Redirect to the activities page after a successful submission
+                setTimeout(() => {
+                    window.location.href = '/activity'; // Redirect to the activity page
+                }, 1000); // Adjust the delay as needed
             } else {
                 document.getElementById('response-message').innerText = "Failed to add activity: " + response.statusText;
             }
