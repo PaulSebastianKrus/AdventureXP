@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Activity</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        form { background: #f4f4f4; padding: 20px; margin: 20px 0; }
+        label, input, select, button { display: block; margin: 10px 0; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<h1>Book Activity</h1>
+<form id="booking-form">
+    <label for="activityId">Activity:</label>
+    <select id="activityId" name="activityId" required>
+        <option value="" disabled selected>Select an activity</option>
+    </select>
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required>
+
+    <label for="time">Time:</label>
+    <input type="time" id="time" name="time" required>
+
+    <label for="people">Number of People:</label>
+    <input type="number" id="people" name="people" required>
+
+    <label for="instructor">Instructor:</label>
+    <input type="text" id="instructor" name="instructor" required>
+
+    <label for="personName">Your Name:</label>
+    <input type="text" id="personName" name="personName" required>
+
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" name="phoneNumber" required>
+
+    <button type="submit">Book Activity</button>
+</form>
+
+<div id="error-message" class="error"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Populate activity dropdown
+        const activitySelect = document.getElementById('activityId');
+        try {
+            const response = await fetch('http://localhost:3000/api/activity');
+            if (!response.ok) {
+                throw new Error('Failed to fetch activities');
+            }
+            const activities = await response.json();
+            activities.forEach(activity => {
+                const option = document.createElement('option');
+                option.value = activity.id; // Ensure this matches the ID in your API
+                option.textContent = activity.name; // Ensure this matches the name in your API
+                activitySelect.appendChild(option);
+            });
+        } catch (error) {
+            document.getElementById('error-message').innerText = error.message;
+        }
+    });
+
+    document.getElementById('booking-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const bookingData = {
+            activityId: document.getElementById('activityId').value,
+            date: document.getElementById('date').value,
+            time: document.getElementById('time').value,
+            people: parseInt(document.getElementById('people').value, 10),
+            instructor: document.getElementById('instructor').value,
+            personName: document.getElementById('personName').value,
+            phoneNumber: document.getElementById('phoneNumber').value
+        };
+
+        try {
+            // Check for conflicting bookings
+            const conflictResponse = await fetch('http://localhost:3000/api/booking/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    activityName: bookingData.activityId, // Ensure correct field
+                    date: bookingData.date,
+                    time: bookingData.time
+                })
+            });
+
+            const conflictData = await conflictResponse.json();
+            if (conflictData.conflict) {
+                throw new Error('Booking conflict: Another booking already exists for the selected date and time.');
+            }
+
+            // Add new booking
+            const response = await fetch('http://localhost:3000/api/booking/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bookingData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Error: ${response.status} - ${errorData.message}`);
+            }
+
+            // If the request was successful
+            alert('Booking added successfully');
+            document.getElementById('booking-form').reset(); // Reset the form after successful booking
+        } catch (error) {
+            document.getElementById('error-message').innerText = error.message;
+        }
+    });
+</script>
+</body>
+</html>
