@@ -27,17 +27,29 @@ public class Activity {
     @Column(name = "season", nullable = false)
     public String season;
 
+    @Column(name = "materialname", nullable = false)
+    public String materialName;
+
+    @Column(name = "amount", nullable = false)
+    public Long amount;
+
+
+
+
+
 
     public Activity(){
 
     }
 
-    public Activity(String activityName, String description, Long weightLimit, Long ageLimit, String season) {
+    public Activity(String activityName, String description, Long weightLimit, Long ageLimit, String season, String materialName, Long amount ) {
         this.activityName = activityName;
         this.description = description;
         this.weightLimit = weightLimit;
         this.ageLimit = ageLimit;
         this.season = season;
+        this.materialName = materialName;
+        this.amount = amount;
     }
 
     public Long getActivity_id() {
@@ -64,6 +76,14 @@ public class Activity {
         return season;
     }
 
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public Long getAmount() {
+        return amount;
+    }
+
     public void setActivity_id(Long activity_id) {
         this.activity_id = activity_id;
     }
@@ -86,5 +106,13 @@ public class Activity {
 
     public void setSeason(String season) {
         this.season = season;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 }

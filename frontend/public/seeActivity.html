@@ -58,52 +58,70 @@
     function displayActivityDetails(activity) {
         const detailsContainer = document.getElementById('activity-details');
         detailsContainer.innerHTML = `
-        <h2>Edit Activity Details</h2>
-        <div class="input-field">
-            <label for="activityName">Activity Name:</label>
-            <div>
-                <span id="activityNameDisplay">${activity.activityName}</span>
-                <button onclick="toggleEdit('activityName')">Edit</button>
-            </div>
-            <input type="text" id="activityName" class="editable" value="${activity.activityName}" style="display:none;">
-            <button onclick="saveChanges('activityName')" class="editable" style="display:none;">Save</button>
+    <h2>Edit Activity Details</h2>
+    <div class="input-field">
+        <label for="activityName">Activity Name:</label>
+        <div>
+            <span id="activityNameDisplay">${activity.activityName}</span>
+            <button onclick="toggleEdit('activityName')">Edit</button>
         </div>
-        <div class="input-field">
-            <label for="description">Description:</label>
-            <div>
-                <span id="descriptionDisplay">${activity.description}</span>
-                <button onclick="toggleEdit('description')">Edit</button>
-            </div>
-            <textarea id="description" class="editable" style="display:none;">${activity.description}</textarea>
-            <button onclick="saveChanges('description')" class="editable" style="display:none;">Save</button>
+        <input type="text" id="activityName" class="editable" value="${activity.activityName}" style="display:none;">
+        <button onclick="saveChanges('activityName')" class="editable" style="display:none;">Save</button>
+    </div>
+    <div class="input-field">
+        <label for="description">Description:</label>
+        <div>
+            <span id="descriptionDisplay">${activity.description}</span>
+            <button onclick="toggleEdit('description')">Edit</button>
         </div>
-        <div class="input-field">
-            <label for="weightLimit">Weight Limit (kg):</label>
-            <div>
-                <span id="weightLimitDisplay">${activity.weightLimit}</span>
-                <button onclick="toggleEdit('weightLimit')">Edit</button>
-            </div>
-            <input type="number" id="weightLimit" class="editable" value="${activity.weightLimit}" style="display:none;">
-            <button onclick="saveChanges('weightLimit')" class="editable" style="display:none;">Save</button>
+        <textarea id="description" class="editable" style="display:none;">${activity.description}</textarea>
+        <button onclick="saveChanges('description')" class="editable" style="display:none;">Save</button>
+    </div>
+    <div class="input-field">
+        <label for="weightLimit">Weight Limit (kg):</label>
+        <div>
+            <span id="weightLimitDisplay">${activity.weightLimit}</span>
+            <button onclick="toggleEdit('weightLimit')">Edit</button>
         </div>
-        <div class="input-field">
-            <label for="ageLimit">Age Limit (years):</label>
-            <div>
-                <span id="ageLimitDisplay">${activity.ageLimit}</span>
-                <button onclick="toggleEdit('ageLimit')">Edit</button>
-            </div>
-            <input type="number" id="ageLimit" class="editable" value="${activity.ageLimit}" style="display:none;">
-            <button onclick="saveChanges('ageLimit')" class="editable" style="display:none;">Save</button>
+        <input type="number" id="weightLimit" class="editable" value="${activity.weightLimit}" style="display:none;">
+        <button onclick="saveChanges('weightLimit')" class="editable" style="display:none;">Save</button>
+    </div>
+    <div class="input-field">
+        <label for="ageLimit">Age Limit (years):</label>
+        <div>
+            <span id="ageLimitDisplay">${activity.ageLimit}</span>
+            <button onclick="toggleEdit('ageLimit')">Edit</button>
         </div>
-        <div class="input-field">
-            <label for="season">Season:</label>
-            <div>
-                <span id="seasonDisplay">${activity.season}</span>
-                <button onclick="toggleEdit('season')">Edit</button>
-            </div>
-            <input type="text" id="season" class="editable" value="${activity.season}" style="display:none;">
-            <button onclick="saveChanges('season')" class="editable" style="display:none;">Save</button>
+        <input type="number" id="ageLimit" class="editable" value="${activity.ageLimit}" style="display:none;">
+        <button onclick="saveChanges('ageLimit')" class="editable" style="display:none;">Save</button>
+    </div>
+    <div class="input-field">
+        <label for="season">Season:</label>
+        <div>
+            <span id="seasonDisplay">${activity.season}</span>
+            <button onclick="toggleEdit('season')">Edit</button>
         </div>
+        <input type="text" id="season" class="editable" value="${activity.season}" style="display:none;">
+        <button onclick="saveChanges('season')" class="editable" style="display:none;">Save</button>
+    </div>
+    <div class="input-field">
+        <label for="materialName">Material Name:</label>
+        <div>
+            <span id="materialNameDisplay">${activity.materialName}</span>
+            <button onclick="toggleEdit('materialName')">Edit</button>
+        </div>
+        <input type="text" id="materialName" class="editable" value="${activity.materialName}" style="display:none;">
+        <button onclick="saveChanges('materialName')" class="editable" style="display:none;">Save</button>
+    </div>
+    <div class="input-field">
+        <label for="amount">Amount:</label>
+        <div>
+            <span id="amountDisplay">${activity.amount}</span>
+            <button onclick="toggleEdit('amount')">Edit</button>
+        </div>
+        <input type="number" id="amount" class="editable" value="${activity.amount}" style="display:none;">
+        <button onclick="saveChanges('amount')" class="editable" style="display:none;">Save</button>
+    </div>
     `;
     }
 

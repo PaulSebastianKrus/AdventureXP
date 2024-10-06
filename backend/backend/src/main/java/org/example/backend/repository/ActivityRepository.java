@@ -21,8 +21,8 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
 }
 
     public void addActivity(Activity activity) {
-        String insertQuery = "INSERT INTO activities (name, description, weightlimit, agelimit, season) VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(insertQuery, activity.getActivityName(), activity.getDescription(), activity.getWeightLimit(), activity.getAgeLimit(), activity.getSeason());
+        String insertQuery = "INSERT INTO activities (name, description, weightlimit, agelimit, season, materialname, amount) VALUES (?, ?, ?, ?, ?,?,?)";
+        jdbcTemplate.update(insertQuery, activity.getActivityName(), activity.getDescription(), activity.getWeightLimit(), activity.getAgeLimit(), activity.getSeason(),activity.getMaterialName(),activity.getAmount());
     }
 
 
@@ -41,6 +41,9 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
             activity.setWeightLimit(rs.getLong("weightlimit"));
             activity.setAgeLimit(rs.getLong("agelimit"));
             activity.setSeason(rs.getString("season"));
+            activity.setMaterialName(rs.getString("materialname"));
+            activity.setAmount(rs.getLong("amount"));
+
             return activity;
         });
     }
@@ -55,6 +58,9 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
             activity.setWeightLimit(rs.getLong("weightlimit"));
             activity.setAgeLimit(rs.getLong("agelimit"));
             activity.setSeason(rs.getString("season"));
+            activity.setMaterialName(rs.getString("materialname"));
+            activity.setAmount(rs.getLong("amount"));
+
             return activity;
         });
     }
@@ -129,6 +135,16 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
             query.append("season = ?, ");
             parameters.add(activity.getSeason());
         }
+        if(activity.getMaterialName()!=null){
+            query.append("materialname = ?, ");
+            parameters.add(activity.getMaterialName());
+        }
+         if(activity.getAmount()!=null){
+            query.append("amount = ?, ");
+            parameters.add(activity.getAmount());
+        }
+
+
 
         if (!parameters.isEmpty()) {
             query.setLength(query.length() - 2); // Remove last comma and space

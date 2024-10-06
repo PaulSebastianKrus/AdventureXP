@@ -251,15 +251,17 @@
 
             // Set content of activityDiv
             activityDiv.innerHTML = `
-                <img src="${imagePath}" alt="${activity.activityName} Image">
-                <div class="activity-content">
-                    <h2>${activity.activityName}</h2>
-                    <p><strong>Description:</strong> ${activity.description}</p>
-                    <p><strong>Weight Limit:</strong> ${activity.weightLimit} kg</p>
-                    <p><strong>Age Limit:</strong> ${activity.ageLimit} years</p>
-                    <p><strong>Season:</strong> ${activity.season}</p>
-                </div>
-            `;
+            <img src="${imagePath}" alt="${activity.activityName} Image">
+            <div class="activity-content">
+                <h2>${activity.activityName}</h2>
+                <p><strong>Description:</strong> ${activity.description}</p>
+                <p><strong>Weight Limit:</strong> ${activity.weightLimit} kg</p>
+                <p><strong>Age Limit:</strong> ${activity.ageLimit} years</p>
+                <p><strong>Season:</strong> ${activity.season}</p>
+                <p><strong>Material Name:</strong> ${activity.materialName}</p>
+                <p><strong>Amount:</strong> ${activity.amount}</p>
+            </div>
+        `;
 
             // Create delete button
             const deleteButton = document.createElement('button');
