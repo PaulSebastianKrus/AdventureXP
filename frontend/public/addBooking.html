@@ -14,16 +14,14 @@
 <body>
 <h1>Book Activity</h1>
 <form id="booking-form">
-    <label for="activityId">Activity:</label>
-    <select id="activityId" name="activityId" required>
-        <option value="" disabled selected>Select an activity</option>
-    </select>
+    <label for="activityName">Activity:</label>
+    <input type="text" id="activityName" name="activityName" placeholder="Enter activity name" required>
 
     <label for="date">Date:</label>
     <input type="date" id="date" name="date" required>
 
     <label for="time">Time:</label>
-    <input type="time" id="time" name="time" required>
+    <input type="time" id="time" name="time" required> <!-- New time input -->
 
     <label for="people">Number of People:</label>
     <input type="number" id="people" name="people" required>
@@ -43,33 +41,17 @@
 <div id="error-message" class="error"></div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Populate activity dropdown
-        const activitySelect = document.getElementById('activityId');
-        try {
-            const response = await fetch('http://localhost:3000/api/activity');
-            if (!response.ok) {
-                throw new Error('Failed to fetch activities');
-            }
-            const activities = await response.json();
-            activities.forEach(activity => {
-                const option = document.createElement('option');
-                option.value = activity.id; // Ensure this matches the ID in your API
-                option.textContent = activity.name; // Ensure this matches the name in your API
-                activitySelect.appendChild(option);
-            });
-        } catch (error) {
-            document.getElementById('error-message').innerText = error.message;
-        }
-    });
-
     document.getElementById('booking-form').addEventListener('submit', async function (event) {
         event.preventDefault();
 
+        // Combine date and time into a single string for LocalDateTime
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const combinedDateTime = `${date}T${time}`; // Format: YYYY-MM-DDTHH:MM
+
         const bookingData = {
-            activityId: document.getElementById('activityId').value,
-            date: document.getElementById('date').value,
-            time: document.getElementById('time').value,
+            activityName: document.getElementById('activityName').value,
+            date: combinedDateTime, // Send combined date and time
             people: parseInt(document.getElementById('people').value, 10),
             instructor: document.getElementById('instructor').value,
             personName: document.getElementById('personName').value,
@@ -77,22 +59,6 @@
         };
 
         try {
-            // Check for conflicting bookings
-            const conflictResponse = await fetch('http://localhost:3000/api/booking/add', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    activityName: bookingData.activityId, // Ensure correct field
-                    date: bookingData.date,
-                    time: bookingData.time
-                })
-            });
-
-            const conflictData = await conflictResponse.json();
-            if (conflictData.conflict) {
-                throw new Error('Booking conflict: Another booking already exists for the selected date and time.');
-            }
-
             // Add new booking
             const response = await fetch('http://localhost:3000/api/booking/add', {
                 method: 'POST',

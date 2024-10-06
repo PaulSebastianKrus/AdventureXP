@@ -3,6 +3,7 @@ package org.example.backend.model;
 import jakarta.persistence.*;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -16,13 +17,10 @@ public class Booking {
     private Long bookingID;
 
     @Column(name = "activityname")
-    private String actvivityName;
+    private String activityName;
 
     @Column(name = "date")
-    private Date date;
-
-    @Column(name = "time")
-    private Time time;
+    private LocalDateTime date;
 
     @Column(name = "people")
     private Long people;
@@ -45,27 +43,19 @@ public class Booking {
     }
 
     public String getActivityName() {
-        return actvivityName;
+        return activityName;
     }
 
     public void setActivityName(String activityName) {
-        this.actvivityName = activityName;
+        this.activityName = activityName;
     }
 
-    public java.sql.Date getDate() {
-        return (java.sql.Date) date;
+    public LocalDateTime getDate() {
+        return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
     }
 
     public Long getPeople() {

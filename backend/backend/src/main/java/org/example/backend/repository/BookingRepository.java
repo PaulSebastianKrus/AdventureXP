@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -18,21 +20,21 @@ public class BookingRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+
     public BookingRepository ( JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean isBookingExists(String activityName, Date date, Time time) {
-        String query = "SELECT COUNT(*) FROM bookings WHERE activityname = ? AND date = ? AND time = ?";
-        Integer count = jdbcTemplate.queryForObject(query, new Object[]{activityName, date, time}, Integer.class);
+    public boolean isBookingExists(String activityName, LocalDateTime date) {
+        String query = "SELECT COUNT(*) FROM bookings WHERE activityname = ? AND date = ?";
+        Integer count = jdbcTemplate.queryForObject(query, new Object[]{activityName, Timestamp.valueOf(date)}, Integer.class);
         return count != null && count > 0;
     }
 
 
-
     public void addBooking(Booking booking) {
-        String insertQuery = "INSERT INTO bookings (activityname, date, time, people, instructor, personname, phonenumber) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(insertQuery, booking.getActivityName(), booking.getDate(), booking.getTime(), booking.getPeople(), booking.getInstructor(), booking.getPersonName(), booking.getPhoneNumber());
+        String insertQuery = "INSERT INTO bookings (activityname, date, people, instructor, personname, phonenumber) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(insertQuery, booking.getActivityName(), booking.getDate(), booking.getPeople(), booking.getInstructor(), booking.getPersonName(), booking.getPhoneNumber());
     }
 
     public void deleteBooking(Long bookingId) {
@@ -46,8 +48,7 @@ public class BookingRepository {
             Booking booking = new Booking();
             booking.setBookingID(rs.getLong("booking_id"));
             booking.setActivityName(rs.getString("activityname"));
-            booking.setDate(rs.getDate("date"));
-            booking.setTime(rs.getTime("time"));
+            booking.setDate(rs.getTimestamp("date").toLocalDateTime());
             booking.setPeople(rs.getLong("people"));
             booking.setInstructor(rs.getString("instructor"));
             booking.setPersonName(rs.getString("personname"));
@@ -62,8 +63,7 @@ public class BookingRepository {
             Booking booking = new Booking();
             booking.setBookingID(rs.getLong("booking_id"));
             booking.setActivityName(rs.getString("activityname"));
-            booking.setDate(rs.getDate("date"));
-            booking.setTime(rs.getTime("time"));
+            booking.setDate(rs.getTimestamp("date").toLocalDateTime());
             booking.setPeople(rs.getLong("people"));
             booking.setInstructor(rs.getString("instructor"));
             booking.setPersonName(rs.getString("personname"));
@@ -84,10 +84,7 @@ public class BookingRepository {
             query.append("date = ?, ");
             parameters.add(booking.getDate());
         }
-        if (booking.getTime() != null) {
-            query.append("time = ?, ");
-            parameters.add(booking.getTime());
-        }
+
         if (booking.getPeople() != null) {
             query.append("people = ?, ");
             parameters.add(booking.getPeople());

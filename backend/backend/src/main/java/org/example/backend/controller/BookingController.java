@@ -62,9 +62,7 @@ public class BookingController {
         if (newBooking.getDate() != null) {
             oldBooking.setDate(newBooking.getDate());
         }
-        if (newBooking.getTime() != null) {
-            oldBooking.setTime(newBooking.getTime());
-        }
+
         if (newBooking.getPeople() != null) {
             oldBooking.setPeople(newBooking.getPeople());
         }

@@ -208,15 +208,17 @@
             const bookingDiv = document.createElement('div');
             bookingDiv.classList.add('booking');
 
+            // Display both date and time using `toLocaleString`
+            const formattedDateTime = new Date(booking.date).toLocaleString(); // This will show date and time
+
             bookingDiv.innerHTML = `
-                <h2>${booking.activityName}</h2>
-                <p><strong>Date:</strong> ${new Date(booking.date).toLocaleDateString()}</p>
-                <p><strong>Time:</strong> ${new Date(booking.time).toLocaleTimeString()}</p>
-                <p><strong>Number of People:</strong> ${booking.people}</p>
-                <p><strong>Instructor:</strong> ${booking.instructor}</p>
-                <p><strong>Person Name:</strong> ${booking.personName}</p>
-                <p><strong>Phone Number:</strong> ${booking.phoneNumber}</p>
-            `;
+            <h2>${booking.activityName}</h2>
+            <p><strong>Date and Time:</strong> ${formattedDateTime}</p>
+            <p><strong>Number of People:</strong> ${booking.people}</p>
+            <p><strong>Instructor:</strong> ${booking.instructor}</p>
+            <p><strong>Person Name:</strong> ${booking.personName}</p>
+            <p><strong>Phone Number:</strong> ${booking.phoneNumber}</p>
+        `;
 
             const deleteButton = document.createElement('button');
             deleteButton.classList.add('delete-button');
@@ -227,6 +229,7 @@
             bookingsContainer.appendChild(bookingDiv);
         });
     }
+
 
     fetchBookings();
 </script>

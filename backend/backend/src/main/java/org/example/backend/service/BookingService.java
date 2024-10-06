@@ -4,8 +4,10 @@ import org.example.backend.model.Booking;
 import org.example.backend.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.sql.Date;
+import java.time.ZoneId;
 import java.util.List;
+
 
 @Service
 public class BookingService {
@@ -17,15 +19,12 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    // Add a new booking
+
     public void addBooking(Booking booking) {
-
         // Check if the booking for the same activity, date, and time exists
-
-        if (bookingRepository.isBookingExists(booking.getActivityName(), booking.getDate(), booking.getTime())) {
+        if (bookingRepository.isBookingExists(booking.getActivityName(), booking.getDate())) {
             throw new IllegalArgumentException("This time slot is already booked for the selected activity.");
         }
-
 
         bookingRepository.addBooking(booking);
     }
