@@ -28,6 +28,12 @@
     <label for="season">Season:</label>
     <input type="text" id="season" name="season" required>
 
+    <label for="materialName">Material Name:</label>
+    <input type="text" id="materialName" name="materialName" required>
+
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" name="amount" required>
+
     <button type="button" onclick="submitForm()">Add Activity</button>
 </form>
 <div id="response-message"></div>
@@ -39,7 +45,9 @@
             description: document.getElementById('description').value,
             weightLimit: document.getElementById('weightLimit').value,
             ageLimit: document.getElementById('ageLimit').value,
-            season: document.getElementById('season').value
+            season: document.getElementById('season').value,
+            materialName: document.getElementById('materialName').value,
+            amount: document.getElementById('amount').value
         };
 
         try {

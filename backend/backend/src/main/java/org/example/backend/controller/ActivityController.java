@@ -65,6 +65,13 @@ public class ActivityController {
         if (newActivity.getSeason() != null) {
             oldActivity.setSeason(newActivity.getSeason());
         }
+        if (newActivity.getMaterialName() != null) {
+            oldActivity.setMaterialName(newActivity.getMaterialName());
+        }
+        if (newActivity.getAmount() != null) {
+            oldActivity.setAmount(newActivity.getAmount());
+        }
+
 
         activityService.updateActivity(oldActivity);
         return ResponseEntity.ok("Activity updated");
