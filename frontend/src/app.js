@@ -198,7 +198,7 @@ app.post('/api/booking/:id', async (req, res) => {
         const bookingID = req.params.id;
         const bookingData = req.body;
 
-        const postResponse = await fetch(`http://localhost:8080/api/activity/${bookingID}`, {
+        const postResponse = await fetch(`http://localhost:8080/api/booking/${bookingID}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(bookingData)
