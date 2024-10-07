@@ -30,8 +30,8 @@ public class BookingService {
     }
 
     // Delete a booking by its ID
-    public void deleteBooking(Long bookingId) {
-        bookingRepository.deleteBooking(bookingId);
+    public void deleteBooking(Long bookingID) {
+        bookingRepository.deleteBooking(bookingID);
     }
 
     // Get all bookings
