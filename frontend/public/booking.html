@@ -155,6 +155,15 @@
     <a href="addBooking.html" class="add-button">Book Activity</a>
 </div>
 
+<h2>Search Bookings</h2>
+<form id="searchForm">
+    <input type="text" id="activityName" name="activityName" placeholder="Activity Name">
+    <button type="button" onclick="searchBookings()">Search</button>
+</form>
+
+<div id="results"></div>
+
+
 <div id="bookings-container"></div>
 <div class="error" id="error-message"></div>
 
@@ -163,6 +172,8 @@
 </footer>
 
 <script>
+    let allBookings = [];  // Global array to store all bookings
+
     async function fetchBookings() {
         try {
             const response = await fetch('http://localhost:3000/api/booking');
@@ -170,7 +181,8 @@
                 throw new Error('Network response was not ok ' + response.statusText);
             }
             const bookings = await response.json();
-            displayBookings(bookings);
+            allBookings = bookings;  // Store fetched bookings in global array
+            displayBookings(allBookings);
         } catch (error) {
             document.getElementById('error-message').innerText = 'Failed to load bookings: ' + error.message;
         }
@@ -202,19 +214,24 @@
 
     function displayBookings(bookings) {
         const bookingsContainer = document.getElementById('bookings-container');
-        bookingsContainer.innerHTML = '';
+        bookingsContainer.innerHTML = '';  // Clear previous results
+
+        // If `bookings` is not an array, wrap it into an array
+        if (!Array.isArray(bookings)) {
+            bookings = [bookings];  // Handle the case where a single booking is returned
+        }
 
         bookings.forEach(booking => {
             // Create an anchor element that wraps the booking div
             const bookingLink = document.createElement('a');
             bookingLink.href = `seeBooking.html?bookingID=${booking.bookingID}`;
-            bookingLink.style.textDecoration = 'none'; // Optional: Remove underline
+            bookingLink.style.textDecoration = 'none';  // Optional: Remove underline
 
             const bookingDiv = document.createElement('div');
             bookingDiv.classList.add('booking');
 
             // Display both date and time using `toLocaleString`
-            const formattedDateTime = new Date(booking.date).toLocaleString(); // This will show date and time
+            const formattedDateTime = new Date(booking.date).toLocaleString();  // Show date and time
 
             bookingDiv.innerHTML = `
             <h2>${booking.activityName}</h2>
@@ -228,12 +245,12 @@
             // Append the booking div to the anchor link
             bookingLink.appendChild(bookingDiv);
 
-            // Create a delete button that won't trigger the anchor link navigation
+            // Create a delete button
             const deleteButton = document.createElement('button');
             deleteButton.classList.add('delete-button');
             deleteButton.innerText = 'Delete';
             deleteButton.onclick = (event) => {
-                event.stopPropagation(); // Prevent anchor navigation on button click
+                event.stopPropagation();  // Prevent anchor navigation on button click
                 event.preventDefault();
                 confirmDeleteBooking(booking.bookingID);
             };
@@ -245,10 +262,23 @@
         });
     }
 
+    // Search bookings by activity name on the frontend
+    function searchBookings() {
+        const activityName = document.getElementById('activityName').value.toLowerCase();
 
+        // Filter bookings based on the activity name
+        const filteredBookings = allBookings.filter(booking =>
+            booking.activityName.toLowerCase().includes(activityName)
+        );
 
+        // Display the filtered bookings
+        displayBookings(filteredBookings);
+    }
+
+    // Initial fetch of all bookings when the page loads
     fetchBookings();
 </script>
+
 
 </body>
 </html>
