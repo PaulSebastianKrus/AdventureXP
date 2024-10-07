@@ -37,9 +37,9 @@ public class BookingRepository {
         jdbcTemplate.update(insertQuery, booking.getActivityName(), booking.getDate(), booking.getPeople(), booking.getInstructor(), booking.getPersonName(), booking.getPhoneNumber());
     }
 
-    public void deleteBooking(Long bookingId) {
+    public void deleteBooking(Long bookingID) {
         String deleteQuery = "DELETE FROM bookings WHERE booking_id = ?";
-        jdbcTemplate.update(deleteQuery, bookingId);
+        jdbcTemplate.update(deleteQuery, bookingID);
     }
 
     public List<Booking> getAllBookings() {

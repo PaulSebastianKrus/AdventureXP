@@ -2,6 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import fetch from 'node-fetch';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Helper to get __dirname since it's not available in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,10 +14,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware setup
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public')); // Serve static files from the 'public' folder
-
-// Helper to get __dirname since it's not available in ES modules
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+app.use(express.static(path.join(__dirname, '..', 'public'))); // Serve static files from the 'public' folder
 
 // ---------- Activity Routes ----------
 
@@ -124,10 +126,6 @@ app.get('/booking/add', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'addBooking.html'));
 });
 
-
-
-
-
 // Fetch all bookings from the backend API
 app.get('/api/booking', async (req, res) => {
     try {
@@ -170,6 +168,27 @@ app.post('/api/booking/add', async (req, res) => {
         res.status(500).send('Error adding booking: ' + error.message);
     }
 });
+
+
+// Delete an activity
+app.delete('/api/booking/:id', async (req, res) => {
+    try {
+        const bookingID = req.params.id;
+        const deleteResponse = await fetch(`http://localhost:8080/api/booking/${bookingID}`, { method: 'DELETE' });
+
+        if (deleteResponse.ok) {
+            res.status(204).send('Booking deleted successfully.');
+        } else {
+            res.status(deleteResponse.status).send('Failed to delete Booking: ' + deleteResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error deleting Booking: ' + error.message);
+    }
+});
+
+
+
+
 
 // Start the server
 app.listen(PORT, () => {
