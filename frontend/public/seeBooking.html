@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .activity-details {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        .input-field {
+            margin-bottom: 10px;
+        }
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .editable {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="booking-details" id="booking-details"></div>
+<div class="error" id="error-message"></div>
+
+<script>
+    let currentBookingId;
+    let bookingData; // Store the entire activity data for updating
+
+    async function fetchBookingDetails(bookingID) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/booking/${bookingID}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            bookingData = await response.json();
+            currentBookingId = bookingData.bookingID; // Assuming activity_id is the correct field
+            displayBookingDetails(bookingData);
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to load booking details: ' + error.message;
+        }
+    }
+
+    function displayBookingDetails(booking) {
+        const detailsContainer = document.getElementById('booking-details');
+        detailsContainer.innerHTML = `
+    <h2>Edit Booking Details</h2>
+
+<div class="input-field">
+    <label for="activityName">Activity Name:</label>
+    <div>
+        <span id="activityNameDisplay">${booking.activityName}</span>
+        <button onclick="toggleEdit('activityName')">Edit</button>
+    </div>
+    <input type="text" id="activityName" class="editable" value="${booking.activityName}" style="display:none;">
+    <button onclick="saveChanges('activityName')" class="editable" style="display:none;">Save</button>
+</div>
+
+<div class="input-field">
+    <label for="date">Date:</label>
+    <div>
+        <span id="dateDisplay">${booking.date}</span>
+        <button onclick="toggleEdit('date')">Edit</button>
+    </div>
+    <input type="datetime-local" id="date" class="editable" value="${booking.date}" style="display:none;">
+    <button onclick="saveChanges('date')" class="editable" style="display:none;">Save</button>
+</div>
+
+<div class="input-field">
+    <label for="people">Number of People:</label>
+    <div>
+        <span id="peopleDisplay">${booking.people}</span>
+        <button onclick="toggleEdit('people')">Edit</button>
+    </div>
+    <input type="number" id="people" class="editable" value="${booking.people}" style="display:none;">
+    <button onclick="saveChanges('people')" class="editable" style="display:none;">Save</button>
+</div>
+
+<div class="input-field">
+    <label for="instructor">Instructor:</label>
+    <div>
+        <span id="instructorDisplay">${booking.instructor}</span>
+        <button onclick="toggleEdit('instructor')">Edit</button>
+    </div>
+    <input type="text" id="instructor" class="editable" value="${booking.instructor}" style="display:none;">
+    <button onclick="saveChanges('instructor')" class="editable" style="display:none;">Save</button>
+</div>
+
+<div class="input-field">
+    <label for="personName">Person Name:</label>
+    <div>
+        <span id="personNameDisplay">${booking.personName}</span>
+        <button onclick="toggleEdit('personName')">Edit</button>
+    </div>
+    <input type="text" id="personName" class="editable" value="${booking.personName}" style="display:none;">
+    <button onclick="saveChanges('personName')" class="editable" style="display:none;">Save</button>
+</div>
+
+<div class="input-field">
+    <label for="phoneNumber">Phone Number:</label>
+    <div>
+        <span id="phoneNumberDisplay">${booking.phoneNumber}</span>
+        <button onclick="toggleEdit('phoneNumber')">Edit</button>
+    </div>
+    <input type="tel" id="phoneNumber" class="editable" value="${booking.phoneNumber}" style="display:none;">
+    <button onclick="saveChanges('phoneNumber')" class="editable" style="display:none;">Save</button>
+</div>
+
+    `;
+    }
+
+
+
+    function toggleEdit(field) {
+        const displayElement = document.getElementById(`${field}Display`);
+        const inputElement = document.getElementById(field);
+        const saveButton = document.querySelector(`button[onclick="saveChanges('${field}')"]`);
+
+        // Check if the displayElement or inputElement is null
+        if (displayElement && inputElement && saveButton) {
+            // Show the editable field and hide the display field
+            displayElement.style.display = 'none';
+            inputElement.style.display = 'block';
+            saveButton.style.display = 'inline-block'; // Show save button
+        } else {
+            console.error(`One of the elements is null: ${field}Display, ${field}, or save button`);
+        }
+    }
+
+
+    async function saveChanges(field) {
+        const updatedValue = document.getElementById(field).value;
+
+        // Update the displayed value
+        document.getElementById(`${field}Display`).innerText = updatedValue;
+
+        // Hide the input field and show the display field
+        document.getElementById(field).style.display = 'none';
+        document.getElementById(`${field}Display`).style.display = 'block';
+
+        // Show edit button again and hide save button
+        const editButton = document.querySelector(`div:has(#${field}Display) > button:nth-child(2)`);
+        editButton.style.display = 'inline-block'; // Show edit button again
+
+        // Prepare the updated activity data
+        const bookingData = {
+            [field]: updatedValue // Only send the updated field
+        };
+
+        // Send the updated value to the server
+        try {
+            const response = await fetch(`http://localhost:3000/api/booking/${currentBookingId}`, {
+                method: 'POST', // Use POST method
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bookingData) // Send the activity data as JSON
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to save changes: ' + error.message;
+        }
+    }
+
+
+    // Extract activity_id from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookingID = urlParams.get('bookingID');
+
+    // Fetch activity details if activityId is found
+    if (bookingID) {
+        fetchBookingDetails(bookingID);
+    } else {
+        document.getElementById('error-message').innerText = 'No booking ID provided.';
+    }
+</script>
+</body>
+</html>

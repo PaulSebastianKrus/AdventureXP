@@ -126,6 +126,12 @@ app.get('/booking/add', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'addBooking.html'));
 });
 
+// Serve `seeActivity.html` at the `/activity/:id` route
+app.get('/booking/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'seeBooking.html'));
+});
+
+
 // Fetch all bookings from the backend API
 app.get('/api/booking', async (req, res) => {
     try {
@@ -170,7 +176,7 @@ app.post('/api/booking/add', async (req, res) => {
 });
 
 
-// Delete an activity
+// Delete an booking
 app.delete('/api/booking/:id', async (req, res) => {
     try {
         const bookingID = req.params.id;
@@ -186,7 +192,27 @@ app.delete('/api/booking/:id', async (req, res) => {
     }
 });
 
+// Update an existing booking
+app.post('/api/booking/:id', async (req, res) => {
+    try {
+        const bookingID = req.params.id;
+        const bookingData = req.body;
 
+        const postResponse = await fetch(`http://localhost:8080/api/activity/${bookingID}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bookingData)
+        });
+
+        if (postResponse.ok) {
+            res.status(200).send('Booking updated successfully.');
+        } else {
+            res.status(postResponse.status).send('Failed to update Booking: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error updating Booking: ' + error.message);
+    }
+});
 
 
 

@@ -205,6 +205,11 @@
         bookingsContainer.innerHTML = '';
 
         bookings.forEach(booking => {
+            // Create an anchor element that wraps the booking div
+            const bookingLink = document.createElement('a');
+            bookingLink.href = `seeBooking.html?bookingID=${booking.bookingID}`;
+            bookingLink.style.textDecoration = 'none'; // Optional: Remove underline
+
             const bookingDiv = document.createElement('div');
             bookingDiv.classList.add('booking');
 
@@ -220,15 +225,26 @@
             <p><strong>Phone Number:</strong> ${booking.phoneNumber}</p>
         `;
 
+            // Append the booking div to the anchor link
+            bookingLink.appendChild(bookingDiv);
+
+            // Create a delete button that won't trigger the anchor link navigation
             const deleteButton = document.createElement('button');
             deleteButton.classList.add('delete-button');
             deleteButton.innerText = 'Delete';
-            deleteButton.onclick = () => confirmDeleteBooking(booking.bookingID);
+            deleteButton.onclick = (event) => {
+                event.stopPropagation(); // Prevent anchor navigation on button click
+                event.preventDefault();
+                confirmDeleteBooking(booking.bookingID);
+            };
 
             bookingDiv.appendChild(deleteButton);
-            bookingsContainer.appendChild(bookingDiv);
+
+            // Append the entire anchor (with the booking) to the bookings container
+            bookingsContainer.appendChild(bookingLink);
         });
     }
+
 
 
     fetchBookings();
