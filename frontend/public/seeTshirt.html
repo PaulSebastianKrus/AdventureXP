@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit T-Shirt Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .tshirt-details {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        .input-field {
+            margin-bottom: 10px;
+        }
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .editable {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Edit T-Shirt Details</h1>
+
+<div class="tshirt-details" id="tshirt-details"></div>
+<div class="error" id="error-message"></div>
+
+<script>
+    let currentTshirtId;
+    let tshirtData; // Store the entire T-shirt data for updating
+
+    async function fetchTshirtDetails(tshirtId) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/tshirt/${tshirtId}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            tshirtData = await response.json();
+            currentTshirtId = tshirtData.tshirtId; // Assuming tshirtId is the correct field
+
+            console.log('Current T-Shirt ID:', currentTshirtId); // Log currentTshirtId
+            displayTshirtDetails(tshirtData);
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to load T-shirt details: ' + error.message;
+        }
+    }
+
+    function displayTshirtDetails(tshirt) {
+        const detailsContainer = document.getElementById('tshirt-details');
+        detailsContainer.innerHTML = `
+            <h2>Edit T-Shirt Details</h2>
+
+            <div class="input-field">
+                <label for="tshirtName">T-Shirt Name:</label>
+                <div>
+                    <span id="tshirtNameDisplay">${tshirt.tshirtName}</span>
+                    <button onclick="toggleEdit('tshirtName')">Edit</button>
+                </div>
+                <input type="text" id="tshirtName" class="editable" value="${tshirt.tshirtName}" style="display:none;">
+                <button onclick="saveChanges('tshirtName')" class="editable" style="display:none;">Save</button>
+            </div>
+
+            <div class="input-field">
+                <label for="price">Price:</label>
+                <div>
+                    <span id="priceDisplay">${tshirt.price}</span>
+                    <button onclick="toggleEdit('price')">Edit</button>
+                </div>
+                <input type="number" id="price" class="editable" value="${tshirt.price}" style="display:none;">
+                <button onclick="saveChanges('price')" class="editable" style="display:none;">Save</button>
+            </div>
+
+            <div class="input-field">
+                <label for="tshirtSize">Size:</label>
+                <div>
+                    <span id="tshirtSizeDisplay">${tshirt.tshirtSize}</span>
+                    <button onclick="toggleEdit('tshirtSize')">Edit</button>
+                </div>
+                <input type="text" id="tshirtSize" class="editable" value="${tshirt.tshirtSize}" style="display:none;">
+                <button onclick="saveChanges('tshirtSize')" class="editable" style="display:none;">Save</button>
+            </div>
+        `;
+    }
+
+    function toggleEdit(field) {
+        const displayElement = document.getElementById(`${field}Display`);
+        const inputElement = document.getElementById(field);
+        const saveButton = document.querySelector(`button[onclick="saveChanges('${field}')"]`);
+
+        // Show the editable field and hide the display field
+        if (displayElement && inputElement && saveButton) {
+            displayElement.style.display = 'none';
+            inputElement.style.display = 'block';
+            saveButton.style.display = 'inline-block'; // Show save button
+        } else {
+            console.error(`One of the elements is null: ${field}Display, ${field}, or save button`);
+        }
+    }
+
+    async function saveChanges(field) {
+        console.log('Current T-Shirt ID before saving:', currentTshirtId); // Log it to see if it's set correctly
+        const updatedValue = document.getElementById(field).value;
+
+        // Update the displayed value
+        document.getElementById(`${field}Display`).innerText = updatedValue;
+
+        // Hide the input field and show the display field
+        document.getElementById(field).style.display = 'none';
+        document.getElementById(`${field}Display`).style.display = 'block';
+
+        // Show edit button again and hide save button
+        const editButton = document.querySelector(`div:has(#${field}Display) > button:nth-child(2)`);
+        editButton.style.display = 'inline-block'; // Show edit button again
+
+        // Prepare the updated T-shirt data
+        const tshirtData = {
+            [field]: updatedValue // Only send the updated field
+        };
+
+        // Send the updated value to the server
+        try {
+            const response = await fetch(`http://localhost:3000/api/tshirt/${currentTshirtId}`, {
+                method: 'POST', // Use POST method
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(tshirtData) // Send the T-shirt data as JSON
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to save changes: ' + error.message;
+        }
+    }
+
+    // Extract tshirt_id from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const tshirtId = urlParams.get('tshirt_id');
+
+    // Fetch T-shirt details if tshirtId is found
+    if (tshirtId) {
+        fetchTshirtDetails(tshirtId);
+    } else {
+        document.getElementById('error-message').innerText = 'No T-shirt ID provided.';
+    }
+</script>
+</body>
+</html>

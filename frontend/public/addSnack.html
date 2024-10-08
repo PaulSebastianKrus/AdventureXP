@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Snack</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        form { background: #f4f4f4; padding: 20px; margin: 20px 0; }
+        label, input, button { display: block; margin: 10px 0; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<h1>Add New Snack</h1>
+<form id="snack-form">
+    <label for="snackName">Snack Name:</label>
+    <input type="text" id="snackName" name="snackName" placeholder="Enter snack name" required>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" step="0.01" placeholder="Enter price" required>
+
+    <label for="snackSize">Size:</label>
+    <input type="text" id="snackSize" name="snackSize" placeholder="Enter size (e.g., small, medium, large)" required>
+
+    <button type="submit">Add Snack</button>
+</form>
+
+<div id="error-message" class="error"></div>
+
+<script>
+    document.getElementById('snack-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        // Capture form values into a snackData object
+        const snackData = {
+            snackName: document.getElementById('snackName').value,
+            price: parseFloat(document.getElementById('price').value),
+            snackSize: document.getElementById('snackSize').value
+        };
+
+        try {
+            // Send POST request to add new snack
+            const response = await fetch('http://localhost:3000/api/snack/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(snackData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Error: ${response.status} - ${errorData.message}`);
+            }
+
+            // If the request was successful
+            alert('Snack added successfully');
+            document.getElementById('snack-form').reset(); // Reset the form after successful addition
+        } catch (error) {
+            document.getElementById('error-message').innerText = error.message;
+        }
+    });
+</script>
+</body>
+</html>
