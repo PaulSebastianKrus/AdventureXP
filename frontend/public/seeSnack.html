@@ -43,14 +43,14 @@
     let currentSnackId;
     let snackData; // Store the entire snack data for updating
 
-    async function fetchSnackDetails(snackID) {
+    async function fetchSnackDetails(snackId) {
         try {
-            const response = await fetch(`http://localhost:3000/api/snack/${snackID}`);
+            const response = await fetch(`http://localhost:3000/api/snack/${snackId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }
             snackData = await response.json();
-            currentSnackId = snackData.snackID; // Assuming snackID is the correct field
+            currentSnackId = snackData.snackId; // Assuming snackID is the correct field
 
             console.log('Current Snack ID:', currentSnackId); // Log currentSnackId
             displaySnackDetails(snackData);
@@ -113,6 +113,7 @@
     }
 
     async function saveChanges(field) {
+        console.log('Current Snack ID before saving:', currentSnackId); // Log it to see if it's set correctly
         const updatedValue = document.getElementById(field).value;
 
         // Update the displayed value
