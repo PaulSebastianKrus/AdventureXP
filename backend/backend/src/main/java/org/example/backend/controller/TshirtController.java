@@ -25,8 +25,11 @@ public class TshirtController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tshirt> getTshirtById(Long id) {
+    public ResponseEntity<Tshirt> getTshirtById(@PathVariable Long id) {
         Tshirt tshirt = tshirtService.getTshirtById(id);
+        if (tshirt == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         return ResponseEntity.ok(tshirt);
     }
 
