@@ -30,7 +30,7 @@ public class TshirtController {
         return ResponseEntity.ok(tshirt);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/add")
     public ResponseEntity<String> addTshirt(@RequestBody Tshirt tshirt){
         tshirtService.addTshirt(tshirt);
         return ResponseEntity.status(201).body("Tshirt added successfully");
@@ -43,7 +43,7 @@ public class TshirtController {
     }
 
 
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
         public ResponseEntity<String> updateTshirt(@PathVariable Long id, @RequestBody Tshirt newTshirt) {
             Tshirt oldTshirt = tshirtService.getTshirtById(id);
 

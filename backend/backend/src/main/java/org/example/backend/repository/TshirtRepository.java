@@ -31,16 +31,16 @@ public class TshirtRepository {
         List<Object> parameters = new ArrayList<>();
 
         if (tshirt.getTshirtName() != null) {
-            query.append("activityname = ?, ");
+            query.append("shirtName = ?, ");
             parameters.add(tshirt.getTshirtName());
         }
         if (tshirt.getTshirtSize() != null) {
-            query.append("date = ?, ");
+            query.append("shirtSize = ?, ");
             parameters.add(tshirt.getTshirtSize());
         }
 
         if (tshirt.getPrice() != null) {
-            query.append("people = ?, ");
+            query.append("price = ?, ");
             parameters.add(tshirt.getPrice());
         }
 

@@ -9,8 +9,7 @@ public class Tshirt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shirt_id")
-    private Long tShirtId;
-
+    private Long tshirtId;
 
     @Column (name = "shirtname")
     private String tshirtName;
@@ -20,11 +19,11 @@ public class Tshirt {
     private Long price;
 
     public Long getTshirtId() {
-        return tShirtId;
+        return tshirtId;
     }
 
     public void setTshirtId(Long tshirtId) {
-        this.tShirtId = tshirtId;
+        this.tshirtId = tshirtId;
     }
 
     public String getTshirtName() {
