@@ -322,6 +322,107 @@ app.post('/api/snack/:id', async (req, res) => {
     }
 });
 
+// ---------- Tshirt Routes ----------
+
+// Serve `tshirt.html` at the `/tshirt` route
+app.get('/tshirt', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'tshirt.html'));
+});
+
+// Serve `addTshirt.html` at the `/tshirt/add` route
+app.get('/tshirt/add', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'addTshirt.html'));
+});
+
+// Serve `seeTshirt.html` at the `/tshirt/:id` route
+app.get('/tshirt/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'seeTshirt.html'));
+});
+
+// Fetch all tshirts from the backend API
+app.get('/api/tshirt', async (req, res) => {
+    try {
+        const response = await fetch('http://localhost:8080/api/tshirt');
+        const tshirts = await response.json();
+        res.json(tshirts);
+    } catch (error) {
+        res.status(500).send('Error fetching tshirts: ' + error.message);
+    }
+});
+
+// Fetch a specific tshirt by ID
+app.get('/api/tshirt/:id', async (req, res) => {
+    const tshirtId = req.params.id;
+    try {
+        const response = await fetch(`http://localhost:8080/api/tshirt/${tshirtId}`);
+        const tshirt = await response.json();
+        res.json(tshirt);
+    } catch (error) {
+        res.status(500).send('Error fetching tshirt: ' + error.message);
+    }
+});
+
+// Handle POST request to add a tshirt
+app.post('/api/tshirt/add', async (req, res) => {
+    try {
+        const tshirtData = req.body;
+        const postResponse = await fetch('http://localhost:8080/api/tshirt/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(tshirtData)
+        });
+
+        if (postResponse.ok) {
+            res.status(201).send('Tshirt added successfully.');
+        } else {
+            res.status(postResponse.status).send('Failed to add tshirt: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error adding tshirt: ' + error.message);
+    }
+});
+
+// Delete a tshirt
+app.delete('/api/tshirt/:id', async (req, res) => {
+    try {
+        const tshirtId = req.params.id;
+        const deleteResponse = await fetch(`http://localhost:8080/api/tshirt/${tshirtId}`, { method: 'DELETE' });
+
+        if (deleteResponse.ok) {
+            res.status(204).send('Tshirt deleted successfully.');
+        } else {
+            res.status(deleteResponse.status).send('Failed to delete tshirt: ' + deleteResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error deleting tshirt: ' + error.message);
+    }
+});
+
+// Update an existing tshirt
+app.post('/api/tshirt/:id', async (req, res) => {
+    try {
+        const tshirtId = req.params.id;
+        const tshirtData = req.body;
+
+        const postResponse = await fetch(`http://localhost:8080/api/tshirt/${tshirtId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(tshirtData)
+        });
+
+        if (postResponse.ok) {
+            res.status(200).send('Tshirt updated successfully.');
+        } else {
+            res.status(postResponse.status).send('Failed to update tshirt: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error updating tshirt: ' + error.message);
+    }
+});
+
+
+
+
 
 
 // Start the server
