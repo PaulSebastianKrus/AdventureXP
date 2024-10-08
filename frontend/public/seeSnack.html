@@ -50,12 +50,15 @@
                 throw new Error('Network response was not ok ' + response.statusText);
             }
             snackData = await response.json();
-            currentSnackId = snackData.snackID; // Assuming snack_id is the correct field
+            currentSnackId = snackData.snackID; // Assuming snackID is the correct field
+
+            console.log('Current Snack ID:', currentSnackId); // Log currentSnackId
             displaySnackDetails(snackData);
         } catch (error) {
             document.getElementById('error-message').innerText = 'Failed to load snack details: ' + error.message;
         }
     }
+
 
     function displaySnackDetails(snack) {
         const detailsContainer = document.getElementById('snack-details');
@@ -130,7 +133,7 @@
 
         // Send the updated value to the server
         try {
-            const response = await fetch(`http://localhost:3000/api/snack/${currentSnackId}`, {
+            const response = await fetch(`http://localhost:3000/api/snack/${currentSnackId}`, { // Check this line
                 method: 'POST', // Use POST method
                 headers: {
                     'Content-Type': 'application/json'
@@ -146,16 +149,18 @@
         }
     }
 
+
     // Extract snack_id from the URL
     const urlParams = new URLSearchParams(window.location.search);
-    const snackID = urlParams.get('snackID');
+    const snackId = urlParams.get('snack_id'); // Change 'snackId' to 'snack_id'
 
     // Fetch snack details if snackID is found
-    if (snackID) {
-        fetchSnackDetails(snackID);
+    if (snackId) {
+        fetchSnackDetails(snackId);
     } else {
         document.getElementById('error-message').innerText = 'No snack ID provided.';
     }
+
 </script>
 </body>
 </html>
