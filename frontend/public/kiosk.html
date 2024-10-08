@@ -10,7 +10,6 @@
             margin: 0;
             padding: 0;
         }
-
         header {
             background-color: #000;
             color: #FFD700;
@@ -21,13 +20,11 @@
             z-index: 1000;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         header h1 {
             margin: 0;
             font-size: 2.5em;
             letter-spacing: 2px;
         }
-
         header nav a {
             color: #FFD700;
             margin: 0 15px;
@@ -35,17 +32,14 @@
             font-weight: bold;
             transition: color 0.3s ease;
         }
-
         header nav a:hover {
             color: #ff4757;
         }
-
         .add-button-container {
             text-align: center;
             margin-top: 20px;
             margin-bottom: 40px;
         }
-
         .add-button {
             display: inline-block;
             background-color: #ff4757;
@@ -57,18 +51,15 @@
             font-size: 1.2em;
             font-weight: bold;
         }
-
         .add-button:hover {
             background-color: #e84343;
         }
-
-        #bookings-container {
+        #snacks-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             padding: 40px;
         }
-
         .booking {
             background-color: #fff;
             border-radius: 15px;
@@ -77,24 +68,20 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
         .booking:hover {
             transform: scale(1.03);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
-
         .booking h2 {
             font-size: 1.5em;
             margin-bottom: 10px;
             color: #333;
         }
-
         .booking p {
             font-size: 1em;
             color: #666;
             margin: 5px 0;
         }
-
         .delete-button {
             margin-top: 10px;
             padding: 8px 15px;
@@ -105,16 +92,13 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         .delete-button:hover {
             background-color: #e84343;
         }
-
         .error {
             color: red;
             text-align: center;
         }
-
         footer {
             background-color: #000;
             color: #FFD700;
@@ -122,18 +106,15 @@
             padding: 30px 20px;
             margin-top: 40px;
         }
-
         footer p {
             margin: 0;
             font-size: 1em;
         }
-
         footer a {
             color: #FFD700;
             text-decoration: none;
             font-weight: bold;
         }
-
         footer a:hover {
             text-decoration: underline;
         }
@@ -153,11 +134,14 @@
     <a href="addSnack.html" class="add-button">Add Snack</a>
 </div>
 
+<div id="error-message" class="error"></div> <!-- Error message div added -->
+
+<div id="snacks-container">Loading snacks...</div> <!-- Added snacks container -->
+
 <footer>
     <p>&copy; 2024 Adventure Center | <a href="privacy.html">Privacy Policy</a></p>
 </footer>
 <script>
-
     async function fetchSnacks() {
         try {
             const response = await fetch('http://localhost:3000/api/snack/');
@@ -167,7 +151,10 @@
             const snacks = await response.json();
             displaySnacks(snacks);
         } catch (error) {
-            document.getElementById('error-message').innerText = 'Failed to load snacks: ' + error.message;
+            const errorMessageElement = document.getElementById('error-message');
+            if (errorMessageElement) {
+                errorMessageElement.innerText = 'Failed to load snacks: ' + error.message;
+            }
         }
     }
 
@@ -184,7 +171,10 @@
                 throw new Error('Failed to delete snack: ' + response.statusText);
             }
         } catch (error) {
-            document.getElementById('error-message').innerText = 'Failed to delete snack: ' + error.message;
+            const errorMessageElement = document.getElementById('error-message');
+            if (errorMessageElement) {
+                errorMessageElement.innerText = 'Failed to delete snack: ' + error.message;
+            }
         }
     }
 
@@ -201,7 +191,7 @@
 
         snacks.forEach(snack => {
             const snackDiv = document.createElement('a'); // Create an anchor tag for the snack
-            snackDiv.classList.add('snack');
+            snackDiv.classList.add('booking');
             snackDiv.href = `seeSnack.html?snack_id=${snack.snackId}`; // Link for details page
 
             // Map for snack images (add more as needed)
@@ -241,8 +231,7 @@
         });
     }
 
-
-    // Fetch activities on page load
+    // Fetch snacks on page load
     fetchSnacks();
 </script>
 

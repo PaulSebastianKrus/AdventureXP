@@ -216,6 +216,28 @@ app.post('/api/booking/:id', async (req, res) => {
 
 // ---------- Snack Routes ----------
 
+// Serve `kiosk.html` at the `/activity` route
+app.get('/snack', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'kiosk.html'));
+});
+
+
+// Serve `addSnack.html` at the `/snack/add` route
+app.get('/snack/add', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'addSnack.html'));
+});
+
+// Serve `seeSnack.html` at the `/snack/:id` route
+app.get('/snack/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'seeSnack.html'));
+});
+
+
+
+
+
+
+
 
 
 // Fetch all snacks from the backend API
