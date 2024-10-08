@@ -32,11 +32,11 @@
     document.getElementById('tshirt-form').addEventListener('submit', async function (event) {
         event.preventDefault();
 
-        // Capture form values into a snackData object
+        // Capture form values into a tshirtData object
         const tshirtData = {
             tshirtName: document.getElementById('tshirtName').value,
             price: parseFloat(document.getElementById('price').value),
-            snackSize: document.getElementById('tshirtSize').value
+            tshirtSize: document.getElementById('tshirtSize').value // Corrected field
         };
 
         try {

@@ -31,13 +31,13 @@ public class TshirtController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<String> addTshirt(Tshirt tshirt){
+    public ResponseEntity<String> addTshirt(@RequestBody Tshirt tshirt){
         tshirtService.addTshirt(tshirt);
         return ResponseEntity.status(201).body("Tshirt added successfully");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTshirt(Long id){
+    public ResponseEntity<String> deleteTshirt(@PathVariable Long id){
         tshirtService.deleteTshirt(id);
         return ResponseEntity.ok("Tshirt deleted successfully");
     }
