@@ -214,6 +214,92 @@ app.post('/api/booking/:id', async (req, res) => {
     }
 });
 
+// ---------- Snack Routes ----------
+
+
+
+// Fetch all snacks from the backend API
+app.get('/api/snack', async (req, res) => {
+    try {
+        const response = await fetch('http://localhost:8080/api/snack');
+        const snack = await response.json();
+        res.json(snack);
+    } catch (error) {
+        res.status(500).send('Error fetching snacks: ' + error.message);
+    }
+});
+
+// Fetch a specific snack by ID
+app.get('/api/snack/:id', async (req, res) => {
+    const snackId = req.params.id;
+    try {
+        const response = await fetch(`http://localhost:8080/api/snack/${snackId}`);
+        const snack = await response.json();
+        res.json(snack);
+    } catch (error) {
+        res.status(500).send('Error fetching snack: ' + error.message);
+    }
+});
+
+// Handle POST request to add a snack
+app.post('/api/snack/add', async (req, res) => {
+    try {
+        const snackData = req.body;
+        const postResponse = await fetch('http://localhost:8080/api/snack/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(snackData)
+        });
+
+        if (postResponse.ok) {
+            res.status(201).send('Snack added successfully.');
+        } else {
+            res.status(postResponse.status).send('Failed to add snack: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error adding snack: ' + error.message);
+    }
+});
+
+
+// Delete a snack
+app.delete('/api/snack/:id', async (req, res) => {
+    try {
+        const snackId = req.params.id;
+        const deleteResponse = await fetch(`http://localhost:8080/api/snack/${snackId}`, { method: 'DELETE' });
+
+        if (deleteResponse.ok) {
+            res.status(204).send('Snack deleted successfully.');
+        } else {
+            res.status(deleteResponse.status).send('Failed to delete snack: ' + deleteResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error deleting snack: ' + error.message);
+    }
+});
+
+// Update an existing snack
+app.post('/api/snack/:id', async (req, res) => {
+    try {
+        const snackId = req.params.id;
+        const snackData = req.body;
+
+        const postResponse = await fetch(`http://localhost:8080/api/snack/${snackId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(snackData)
+        });
+
+        if (postResponse.ok) {
+            res.status(200).send('Snack updated successfully.');
+        } else {
+            res.status(postResponse.status).send('Failed to update snack: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error updating snack: ' + error.message);
+    }
+});
+
 
 
 // Start the server

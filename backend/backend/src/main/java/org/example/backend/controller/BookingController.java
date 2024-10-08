@@ -19,8 +19,6 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    @Autowired
-    private ActivityService activityService;
 
     @GetMapping
     public List<Booking> getAllBookings() {

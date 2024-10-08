@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snack Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .snack-details {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        .input-field {
+            margin-bottom: 10px;
+        }
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .editable {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="snack-details" id="snack-details"></div>
+<div class="error" id="error-message"></div>
+
+<script>
+    let currentSnackId;
+    let snackData; // Store the entire snack data for updating
+
+    async function fetchSnackDetails(snackID) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/snack/${snackID}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            snackData = await response.json();
+            currentSnackId = snackData.snackID; // Assuming snack_id is the correct field
+            displaySnackDetails(snackData);
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to load snack details: ' + error.message;
+        }
+    }
+
+    function displaySnackDetails(snack) {
+        const detailsContainer = document.getElementById('snack-details');
+        detailsContainer.innerHTML = `
+            <h2>Edit Snack Details</h2>
+
+            <div class="input-field">
+                <label for="snackName">Snack Name:</label>
+                <div>
+                    <span id="snackNameDisplay">${snack.snackName}</span>
+                    <button onclick="toggleEdit('snackName')">Edit</button>
+                </div>
+                <input type="text" id="snackName" class="editable" value="${snack.snackName}" style="display:none;">
+                <button onclick="saveChanges('snackName')" class="editable" style="display:none;">Save</button>
+            </div>
+
+            <div class="input-field">
+                <label for="price">Price:</label>
+                <div>
+                    <span id="priceDisplay">${snack.price}</span>
+                    <button onclick="toggleEdit('price')">Edit</button>
+                </div>
+                <input type="number" id="price" class="editable" value="${snack.price}" style="display:none;">
+                <button onclick="saveChanges('price')" class="editable" style="display:none;">Save</button>
+            </div>
+
+            <div class="input-field">
+                <label for="snackSize">Size:</label>
+                <div>
+                    <span id="snackSizeDisplay">${snack.snackSize}</span>
+                    <button onclick="toggleEdit('snackSize')">Edit</button>
+                </div>
+                <input type="text" id="snackSize" class="editable" value="${snack.snackSize}" style="display:none;">
+                <button onclick="saveChanges('snackSize')" class="editable" style="display:none;">Save</button>
+            </div>
+        `;
+    }
+
+    function toggleEdit(field) {
+        const displayElement = document.getElementById(`${field}Display`);
+        const inputElement = document.getElementById(field);
+        const saveButton = document.querySelector(`button[onclick="saveChanges('${field}')"]`);
+
+        // Show the editable field and hide the display field
+        if (displayElement && inputElement && saveButton) {
+            displayElement.style.display = 'none';
+            inputElement.style.display = 'block';
+            saveButton.style.display = 'inline-block'; // Show save button
+        } else {
+            console.error(`One of the elements is null: ${field}Display, ${field}, or save button`);
+        }
+    }
+
+    async function saveChanges(field) {
+        const updatedValue = document.getElementById(field).value;
+
+        // Update the displayed value
+        document.getElementById(`${field}Display`).innerText = updatedValue;
+
+        // Hide the input field and show the display field
+        document.getElementById(field).style.display = 'none';
+        document.getElementById(`${field}Display`).style.display = 'block';
+
+        // Show edit button again and hide save button
+        const editButton = document.querySelector(`div:has(#${field}Display) > button:nth-child(2)`);
+        editButton.style.display = 'inline-block'; // Show edit button again
+
+        // Prepare the updated snack data
+        const snackData = {
+            [field]: updatedValue // Only send the updated field
+        };
+
+        // Send the updated value to the server
+        try {
+            const response = await fetch(`http://localhost:3000/api/snack/${currentSnackId}`, {
+                method: 'POST', // Use POST method
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(snackData) // Send the snack data as JSON
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to save changes: ' + error.message;
+        }
+    }
+
+    // Extract snack_id from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const snackID = urlParams.get('snackID');
+
+    // Fetch snack details if snackID is found
+    if (snackID) {
+        fetchSnackDetails(snackID);
+    } else {
+        document.getElementById('error-message').innerText = 'No snack ID provided.';
+    }
+</script>
+</body>
+</html>
