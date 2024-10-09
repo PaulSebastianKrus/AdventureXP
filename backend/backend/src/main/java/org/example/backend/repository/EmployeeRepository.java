@@ -52,7 +52,7 @@ public class EmployeeRepository {
     }
 
     public Employee updateEmployee(Employee employee) {
-        StringBuilder query = new StringBuilder("UPDATE activities SET ");
+        StringBuilder query = new StringBuilder("UPDATE employees SET ");
         List<Object> parameters = new ArrayList<>();
 
         if (employee.getName() != null) {
