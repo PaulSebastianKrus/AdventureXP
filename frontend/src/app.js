@@ -421,6 +421,104 @@ app.post('/api/tshirt/:id', async (req, res) => {
 });
 
 
+// ---------- Employee Routes ----------
+
+// Serve `employee.html` at the `/employee` route
+app.get('/employee', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'employee.html'));
+});
+
+
+// Serve `addEmployee.html` at the `/employee/add` route
+app.get('/employee/add', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'addEmployee.html'));
+});
+
+// Serve `seeEmployee.html` at the `/employee/:id` route
+app.get('/employee/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'seeEmployee.html'));
+});
+
+// Fetch all employees from the backend API
+app.get('/api/employee', async (req, res) => {
+    try {
+        const response = await fetch('http://localhost:8080/api/employee');
+        const employees = await response.json();
+        res.json(employees);
+    } catch (error) {
+        res.status(500).send('Error fetching employees: ' + error.message);
+    }
+});
+
+// Fetch a specific employee by ID
+app.get('/api/employee/:id', async (req, res) => {
+    const employeeId = req.params.id;
+    try {
+        const response = await fetch(`http://localhost:8080/api/employee/${employeeId}`);
+        const employee = await response.json();
+        res.json(employee);
+    } catch (error) {
+        res.status(500).send('Error fetching employee: ' + error.message);
+    }
+});
+
+// Handle POST request to add an employee
+app.post('/api/employee/add', async (req, res) => {
+    try {
+        const employeeData = req.body;
+        const postResponse = await fetch('http://localhost:8080/api/employee/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(employeeData)
+        });
+
+        if (postResponse.ok) {
+            res.status(201).send('Employee added successfully.');
+        } else {
+            res.status(postResponse.status).send('Failed to add employee: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error adding employee: ' + error.message);
+    }
+});
+
+// Delete an employee
+app.delete('/api/employee/:id', async (req, res) => {
+    try {
+        const employeeId = req.params.id;
+        const deleteResponse = await fetch(`http://localhost:8080/api/employee/${employeeId}`, { method: 'DELETE' });
+
+        if (deleteResponse.ok) {
+            res.status(204).send('Employee deleted successfully.');
+        } else {
+            res.status(deleteResponse.status).send('Failed to delete employee: ' + deleteResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error deleting employee: ' + error.message);
+    }
+});
+
+// Update an existing employee
+app.post('/api/employee/:id', async (req, res) => {
+    try {
+        const employeeId = req.params.id;
+        const employeeData = req.body;
+
+        const postResponse = await fetch(`http://localhost:8080/api/employee/${employeeId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(employeeData)
+        });
+
+        if (postResponse.ok) {
+            res.status(200).send('Employee updated successfully.');
+        } else {
+            res.status(postResponse.status).send('Failed to update employee: ' + postResponse.statusText);
+        }
+    } catch (error) {
+        res.status(500).send('Error updating employee: ' + error.message);
+    }
+});
 
 
 
