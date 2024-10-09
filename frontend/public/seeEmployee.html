@@ -2,9 +2,152 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .employee-details {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        .input-field {
+            margin-bottom: 10px;
+        }
+        .input-field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .editable {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+<h1>Employee Details</h1>
 
+<div class="employee-details" id="employee-details"></div>
+<div class="error" id="error-message"></div>
+
+<script>
+    let currentEmployeeId;
+    let employeeData; // Store the entire employee data for updating
+
+    async function fetchEmployeeDetails(employeeId) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/employee/${employeeId}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            employeeData = await response.json();
+            currentEmployeeId = employeeData.id;
+
+            displayEmployeeDetails(employeeData);
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to load employee details: ' + error.message;
+        }
+    }
+
+    function displayEmployeeDetails(employee) {
+        const detailsContainer = document.getElementById('employee-details');
+        detailsContainer.innerHTML = `
+            <h2>Edit Employee Details</h2>
+
+            <div class="input-field">
+                <label for="employeeName">Employee Name:</label>
+                <div>
+                    <span id="employeeNameDisplay">${employee.name}</span>
+                    <button onclick="toggleEdit('employeeName')">Edit</button>
+                </div>
+                <input type="text" id="employeeName" class="editable" value="${employee.name}" style="display:none;">
+                <button onclick="saveChanges('employeeName')" class="editable" style="display:none;">Save</button>
+            </div>
+
+            <div class="input-field">
+                <label for="role">Role:</label>
+                <div>
+                    <span id="roleDisplay">${employee.role}</span>
+                    <button onclick="toggleEdit('role')">Edit</button>
+                </div>
+                <input type="text" id="role" class="editable" value="${employee.role}" style="display:none;">
+                <button onclick="saveChanges('role')" class="editable" style="display:none;">Save</button>
+            </div>
+
+            <div class="input-field">
+                <label for="activities">Activities:</label>
+                <div>
+                    <span id="activitiesDisplay">${employee.activities}</span>
+                    <button onclick="toggleEdit('activities')">Edit</button>
+                </div>
+                <input type="text" id="activities" class="editable" value="${employee.activities}" style="display:none;">
+                <button onclick="saveChanges('activities')" class="editable" style="display:none;">Save</button>
+            </div>
+        `;
+    }
+
+    function toggleEdit(field) {
+        const displayElement = document.getElementById(`${field}Display`);
+        const inputElement = document.getElementById(field);
+        const saveButton = document.querySelector(`button[onclick="saveChanges('${field}')"]`);
+
+        if (displayElement && inputElement && saveButton) {
+            displayElement.style.display = 'none';
+            inputElement.style.display = 'block';
+            saveButton.style.display = 'inline-block';
+        } else {
+            console.error(`One of the elements is null: ${field}Display, ${field}, or save button`);
+        }
+    }
+
+    async function saveChanges(field) {
+        const updatedValue = document.getElementById(field).value;
+        document.getElementById(`${field}Display`).innerText = updatedValue;
+
+        document.getElementById(field).style.display = 'none';
+        document.getElementById(`${field}Display`).style.display = 'block';
+
+        const editButton = document.querySelector(`div:has(#${field}Display) > button:nth-child(2)`);
+        editButton.style.display = 'inline-block';
+
+        const updatedEmployeeData = {
+            [field]: updatedValue
+        };
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/employee/${currentEmployeeId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedEmployeeData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+        } catch (error) {
+            document.getElementById('error-message').innerText = 'Failed to save changes: ' + error.message;
+        }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const employeeId = urlParams.get('id');
+
+    if (employeeId) {
+        fetchEmployeeDetails(employeeId);
+    } else {
+        document.getElementById('error-message').innerText = 'No employee ID provided.';
+    }
+</script>
 </body>
 </html>
