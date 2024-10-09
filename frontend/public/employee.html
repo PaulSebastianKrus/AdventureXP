@@ -60,12 +60,6 @@
             gap: 20px;
             padding: 40px;
         }
-        #tshirts-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 40px;
-        }
         .booking {
             background-color: #fff;
             border-radius: 15px;
@@ -77,6 +71,13 @@
         .booking:hover {
             transform: scale(1.03);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .booking img {
+            width: 100%;
+            height: 200px; /* Ensure the images have a fixed height */
+            object-fit: cover; /* Ensures the images are contained */
+            border-radius: 10px; /* Rounded corners for the images */
+            margin-bottom: 15px; /* Space between image and text */
         }
         .booking h2 {
             font-size: 1.5em;
@@ -140,11 +141,9 @@
     <a href="addEmployee.html" class="add-button">Add Employee</a>
 </div>
 
-<div id="employee-container">Loading Employee...</div>
+<div id="employee-container">Loading Employees...</div>
 
 <div id="error-message" class="error"></div> <!-- Error message div added -->
-
-
 
 <footer>
     <p>&copy; 2024 Adventure Center | <a href="privacy.html">Privacy Policy</a></p>
@@ -177,14 +176,11 @@
 
             // Map for employee images (add more as needed)
             const employeeImageMap = {
-                'chips': 'images/chips.jpg',
-                'popcorn': 'images/popcorn.jpg',
-                'soda': 'images/soda.jpg',
-                'candy': 'images/candy.jpg',
+                'man': 'officeman/chips.jpg',
             };
 
             const sanitizedEmployeeName = employee.name.trim().toLowerCase();
-            let imagePath = employeeImageMap[sanitizedEmployeeName] || 'images/default_employee.jpg'; // Use default image if not found
+            let imagePath = employeeImageMap[sanitizedEmployeeName] || 'images/officeman.jpg'; // Use default image if not found
 
             // Set content of employeeDiv
             employeeDiv.innerHTML = `
@@ -214,11 +210,6 @@
 
     // Fetch employees on page load
     fetchEmployee();
-
-
-
-
 </script>
-
 </body>
 </html>
