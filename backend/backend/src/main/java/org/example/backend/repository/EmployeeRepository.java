@@ -17,18 +17,18 @@ public class EmployeeRepository {
 
 
     public void addEmployee(Employee employee) {
-        String insertQuery = "INSERT INTO employee (name, role, activities) VALUES (?, ?, ?)";
+        String insertQuery = "INSERT INTO employees (name, role, activities) VALUES (?, ?, ?)";
         jdbcTemplate.update(insertQuery, employee.getName(), employee.getRole(), employee.getActivities());
     }
 
     public void deleteEmployee(Long id) {
-        String query = "DELETE FROM employee WHERE id = ?";
+        String query = "DELETE FROM employees WHERE id = ?";
         jdbcTemplate.update(query, id);
     }
 
 
     public List<Employee> getAllEmployees() {
-        String query = "SELECT * FROM employee";
+        String query = "SELECT * FROM employees";
         return jdbcTemplate.query(query, (rs, rowNum) -> {
             Employee employee = new Employee();
             employee.setId(rs.getLong("id"));
@@ -40,7 +40,7 @@ public class EmployeeRepository {
     }
 
     public Employee getEmployeeById(Long id) {
-        String query = "SELECT * FROM employee WHERE id = ?";
+        String query = "SELECT * FROM employees WHERE id = ?";
         return jdbcTemplate.queryForObject(query, new Object[]{id}, (rs, rowNum) -> {
             Employee employee = new Employee();
             employee.setId(rs.getLong("id"));
