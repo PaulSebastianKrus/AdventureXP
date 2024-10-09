@@ -196,6 +196,35 @@
             </div>
         `;
 
+            async function deleteEmployee(id) {
+                try {
+                    const response = await fetch(`http://localhost:3000/api/employee/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        alert('Employee deleted successfully!');
+                        fetchEmployee();
+                    } else {
+                        throw new Error('Failed to delete employee: ' + response.statusText);
+                    }
+                } catch (error) {
+                    const errorMessageElement = document.getElementById('error-message');
+                    if (errorMessageElement) {
+                        errorMessageElement.innerText = 'Failed to delete employee: ' + error.message;
+                    }
+                }
+            }
+
+
+            function confirmDeleteEmployee(id) {
+                const userConfirmed = confirm('Are you sure you want to delete this employee?');
+                if (userConfirmed) {
+                    deleteEmployee(id);
+                }
+            }
+
+
             // Create delete button
             const deleteButton = document.createElement('button');
             deleteButton.classList.add('delete-button');
