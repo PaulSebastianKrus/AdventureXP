@@ -5,13 +5,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Activity</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        form { background: #f4f4f4; padding: 20px; margin: 20px 0; }
-        label, input, button { display: block; margin: 10px 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Matching font family */
+            background-color: #f9f9f9; /* Light background */
+            margin: 0;
+            padding: 0;
+            text-align: center; /* Center all text */
+        }
+
+        /* Header styling */
+        header {
+            background-color: #000; /* Black background */
+            color: #FFD700; /* Yellow text */
+            padding: 20px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em; /* Same as activities.html */
+            letter-spacing: 2px;
+        }
+
+        /* Navigation links */
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: #FFD700; /* Yellow for navigation links */
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            font-size: 1.2em; /* Larger font size for nav links */
+        }
+        nav a:hover {
+            color: #ff4757; /* Red on hover */
+        }
+
+        /* Title styling */
+        h1 {
+            font-size: 2em; /* Same size as in activities.html */
+            margin: 40px 0 20px; /* Top and bottom margin */
+            color: #ff4757; /* Dark grey for title */
+        }
+
+        /* Back button styling */
+        .back-button {
+            background-color: #000; /* Red background */
+            color: #FFD700;
+            padding: 20px 40px; /* Increased padding for a larger button */
+            text-decoration: none;
+            border-radius: 30px; /* Matching button shape */
+            margin: 20px 0;
+            display: inline-block;
+            font-size: 1.5em; /* Increased font size for button */
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #e84343; /* Darker red on hover */
+        }
+
+        /* Form styling */
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white; /* White background for form */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px; /* Limit form width */
+        }
+
+        /* Input styling */
+        input, textarea {
+            width: 90%; /* Full width inputs */
+            padding: 10px;
+            margin: 10px 0; /* Spacing between inputs */
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 1em; /* Consistent font size for inputs */
+        }
+        input:focus, textarea:focus {
+            border-color: #4a90e2; /* Highlight on focus */
+            outline: none; /* Remove outline */
+        }
+
+        /* Button styling */
+        button {
+            background-color: #000; /* Green background */
+            color: #FFD700;
+            padding: 20px 50px; /* Increased padding for a larger button */
+            font-size: 1.5em; /* Increased font size for button */
+            border: none; /* No border */
+            border-radius: 30px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+            margin: 20px 0; /* Spacing above and below */
+        }
+        button:hover {
+            background-color: #218838; /* Darker green on hover */
+            transform: scale(1.05); /* Slightly increase size on hover */
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #000; /* Black background */
+            color: #FFD700; /* Yellow text */
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+        footer p {
+            margin: 0;
+            font-size: 1em;
+            color: #FFD700; /* Yellow text for footer */
+        }
+        footer a {
+            color: #FFD700; /* Yellow for links */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        footer a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        /* Error message styling */
+        .error {
+            color: red; /* Red for error messages */
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em; /* Larger font size for error messages */
+        }
     </style>
 </head>
 <body>
+<header>
+    <h1>Adventure Center</h1>
+    <nav>
+        <a href="activity.html">Activities</a>
+        <a href="booking.html">Booking</a>
+        <a href="kiosk.html">Kiosk</a>
+        <a href="employee.html">Employees</a>
+    </nav>
+</header>
+
 <h1>Add New Activity</h1>
+<a href="activity.html" class="back-button">Back to Activities</a>
 <form id="activity-form">
     <label for="activityName">Activity Name:</label>
     <input type="text" id="activityName" name="activityName" required>
@@ -74,5 +216,8 @@
         }
     }
 </script>
+<footer>
+    <p>&copy; 2024 Adventure Center | <a href="privacy.html">Privacy Policy</a></p>
+</footer>
 </body>
 </html>
