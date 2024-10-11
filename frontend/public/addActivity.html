@@ -160,7 +160,7 @@
     <input type="text" id="activityName" name="activityName" required>
 
     <label for="description">Description:</label>
-    <input type="text" id="description" name="description" required>
+    <textarea id="description" name="description" required></textarea>
 
     <label for="weightLimit">Weight Limit:</label>
     <input type="number" id="weightLimit" name="weightLimit" required>
@@ -174,48 +174,58 @@
     <label for="materialName">Material Name:</label>
     <input type="text" id="materialName" name="materialName" required>
 
-    <label for="amount">Amount:</label>
-    <input type="number" id="amount" name="amount" required>
+    <label for="duration">Duration:</label>
+    <input type="time" id="duration" name="duration" required>
 
     <button type="button" onclick="submitForm()">Add Activity</button>
 </form>
 <div id="response-message"></div>
 
 <script>
-    async function submitForm() {
+
+        async function submitForm() {
         const activity = {
-            activityName: document.getElementById('activityName').value,
-            description: document.getElementById('description').value,
-            weightLimit: document.getElementById('weightLimit').value,
-            ageLimit: document.getElementById('ageLimit').value,
-            season: document.getElementById('season').value,
-            materialName: document.getElementById('materialName').value,
-            amount: document.getElementById('amount').value
-        };
+        activityName: document.getElementById('activityName').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        weightLimit: Number(document.getElementById('weightLimit').value),
+        ageLimit: Number(document.getElementById('ageLimit').value),
+        season: document.getElementById('season').value.trim(),
+        materialName: document.getElementById('materialName').value.trim(),
+        duration: document.getElementById('duration').value + ':00' // Converts "HH:MM" to "HH:MM:00"
+    };
+
+        // Basic frontend validation
+        if (isNaN(activity.weightLimit) || isNaN(activity.ageLimit)) {
+        document.getElementById('response-message').innerText = "Weight Limit and Age Limit must be valid numbers.";
+        return;
+    }
 
         try {
-            const response = await fetch('http://localhost:3000/api/activity/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(activity)
-            });
+        const response = await fetch('http://localhost:3000/api/activity/add', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(activity)
+    });
 
-            if (response.ok) {
-                document.getElementById('response-message').innerText = "Activity added successfully!";
+        const data = await response.json();
 
-                // Redirect to the activities page after a successful submission
-                setTimeout(() => {
-                    window.location.href = '/activity'; // Redirect to the activity page
-                }, 1000); // Adjust the delay as needed
-            } else {
-                document.getElementById('response-message').innerText = "Failed to add activity: " + response.statusText;
-            }
-        } catch (error) {
-            document.getElementById('response-message').innerText = "Error: " + error.message;
-        }
+        if (response.ok) {
+        alert('Activity added successfully');
+        document.getElementById('activity-form').reset();
+        document.getElementById('response-message').innerText = "Activity added successfully!";
+        setTimeout(() => {
+        window.location.href = 'activity.html'; // Redirect to activity.html
+    }, 1000);
+    } else {
+        throw new Error(data.message || 'Failed to add activity.');
     }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('response-message').innerText = `Error: ${error.message}`;
+    }
+    }
+
+
 </script>
 <footer>
     <p>&copy; 2024 Adventure Center | <a href="privacy.html">Privacy Policy</a></p>

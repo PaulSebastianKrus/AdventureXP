@@ -2,6 +2,9 @@ package org.example.backend.model;
 
 import jakarta.persistence.*;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "activities")
 public class Activity {
@@ -13,27 +16,25 @@ public class Activity {
     private Long activity_id;
 
     @Column(name = "name",nullable = false, unique = true)
-    public String activityName;
+    private String activityName;
 
     @Column(name = "description",nullable = false)
-    public String description;
+    private String description;
 
     @Column(name = "weightlimit", nullable = false)
-    public Long weightLimit;
+    private Long weightLimit;
 
     @Column(name = "agelimit", nullable = false)
-    public Long ageLimit;
+    private Long ageLimit;
 
     @Column(name = "season", nullable = false)
-    public String season;
+    private String season;
 
     @Column(name = "materialname", nullable = false)
-    public String materialName;
+    private String materialName;
 
-    @Column(name = "amount", nullable = false)
-    public Long amount;
-
-
+    @Column(name = "duration", nullable = false)
+    private Time duration;
 
 
 
@@ -42,14 +43,14 @@ public class Activity {
 
     }
 
-    public Activity(String activityName, String description, Long weightLimit, Long ageLimit, String season, String materialName, Long amount ) {
+    public Activity(String activityName, String description, Long weightLimit, Long ageLimit, String season, String materialName, Time duration) {
         this.activityName = activityName;
         this.description = description;
         this.weightLimit = weightLimit;
         this.ageLimit = ageLimit;
         this.season = season;
         this.materialName = materialName;
-        this.amount = amount;
+        this.duration = duration;
     }
 
     public Long getActivity_id() {
@@ -80,8 +81,8 @@ public class Activity {
         return materialName;
     }
 
-    public Long getAmount() {
-        return amount;
+    public Time getDuration() {
+        return duration;
     }
 
     public void setActivity_id(Long activity_id) {
@@ -112,7 +113,7 @@ public class Activity {
         this.materialName = materialName;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setDuration(Time duration) {
+        this.duration = duration;
     }
 }

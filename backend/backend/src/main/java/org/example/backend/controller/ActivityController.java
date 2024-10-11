@@ -68,8 +68,8 @@ public class ActivityController {
         if (newActivity.getMaterialName() != null) {
             oldActivity.setMaterialName(newActivity.getMaterialName());
         }
-        if (newActivity.getAmount() != null) {
-            oldActivity.setAmount(newActivity.getAmount());
+        if (newActivity.getDuration() != null) {
+            oldActivity.setDuration(newActivity.getDuration());
         }
 
 
