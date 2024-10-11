@@ -21,7 +21,7 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
 }
 
     public void addActivity(Activity activity) {
-        String insertQuery = "INSERT INTO activities (name, description, weightlimit, agelimit, season, materialname, amount) VALUES (?, ?, ?, ?, ?,?,?)";
+        String insertQuery = "INSERT INTO activities (name, description, weightlimit, agelimit, season, materialname, amount) VALUES (?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(insertQuery, activity.getActivityName(), activity.getDescription(), activity.getWeightLimit(), activity.getAgeLimit(), activity.getSeason(),activity.getMaterialName(),activity.getAmount());
     }
 

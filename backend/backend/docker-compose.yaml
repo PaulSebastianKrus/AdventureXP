@@ -1,0 +1,33 @@
+services:
+  # Service for Spring Boot application
+  app:
+    build:
+      context: .  # Go one level up to find mvnw, pom.xml, and src
+      dockerfile: Dockerfile  # Specify the path to the Dockerfile
+    container_name: springboot-app
+    ports:
+      - "8080:8080"  # External access to the Spring Boot app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      - db  # Indicates that "app" service depends on MySQL service
+
+  # MySQL database service
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"  # External access to the MySQL database
+    volumes:
+      - db_data:/var/lib/mysql  # Persistent data storage
+
+volumes:
+  db_data:

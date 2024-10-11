@@ -31,6 +31,8 @@ public class ActivityRepositoryH2Test {
         newActivity.setWeightLimit(11L);
         newActivity.setAgeLimit(31L);
         newActivity.setSeason("sommer");
+        newActivity.setMaterialName("testMaterial");
+        newActivity.setAmount(67L);
 
         repository.addActivity(newActivity);
 
@@ -51,6 +53,9 @@ public class ActivityRepositoryH2Test {
         existingActivity.setWeightLimit(70L);
         existingActivity.setAgeLimit(18L);
         existingActivity.setSeason("updatedSeason");
+        existingActivity.setMaterialName("updatedMaterial");
+        existingActivity.setAmount(2L);
+
 
         Activity updatedActivity = repository.updateActivity(existingActivity);
 
@@ -60,6 +65,8 @@ public class ActivityRepositoryH2Test {
         assertEquals(70L, updatedActivity.getWeightLimit());
         assertEquals(18L, updatedActivity.getAgeLimit());
         assertEquals("updatedSeason", updatedActivity.getSeason());
+        assertEquals("updatedMaterial", updatedActivity.getMaterialName());
+        assertEquals(2L, updatedActivity.getAmount());
 
     }
 
