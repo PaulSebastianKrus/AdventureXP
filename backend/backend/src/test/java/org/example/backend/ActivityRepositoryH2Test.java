@@ -11,6 +11,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Time;
+import java.time.LocalTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
@@ -32,7 +35,7 @@ public class ActivityRepositoryH2Test {
         newActivity.setAgeLimit(31L);
         newActivity.setSeason("sommer");
         newActivity.setMaterialName("testMaterial");
-        newActivity.setAmount(67L);
+        newActivity.setDuration(Time.valueOf(LocalTime.of(1, 30, 0)));
 
         repository.addActivity(newActivity);
 
@@ -40,7 +43,6 @@ public class ActivityRepositoryH2Test {
 
         assertEquals("testActivity", retrievedActivity.getActivityName());
     }
-
 
     @Test
     public void editActivity(){
@@ -54,8 +56,6 @@ public class ActivityRepositoryH2Test {
         existingActivity.setAgeLimit(18L);
         existingActivity.setSeason("updatedSeason");
         existingActivity.setMaterialName("updatedMaterial");
-        existingActivity.setAmount(2L);
-
 
         Activity updatedActivity = repository.updateActivity(existingActivity);
 
@@ -66,13 +66,10 @@ public class ActivityRepositoryH2Test {
         assertEquals(18L, updatedActivity.getAgeLimit());
         assertEquals("updatedSeason", updatedActivity.getSeason());
         assertEquals("updatedMaterial", updatedActivity.getMaterialName());
-        assertEquals(2L, updatedActivity.getAmount());
-
     }
 
     @Test
     public void deleteActivity(){
-
         Activity existingActivity = repository.getActivityById(2L);
 
         assertNotNull(existingActivity);
@@ -86,18 +83,5 @@ public class ActivityRepositoryH2Test {
         }
 
         assertNull(deletedActivity);
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
 }
