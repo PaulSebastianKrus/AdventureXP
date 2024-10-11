@@ -128,14 +128,15 @@
 <h1>Add New Snack</h1>
 <a href="kiosk.html" class="back-button">Back to Kiosk</a>
 <form id="snack-form">
-    <label for="name">Snack Name:</label>
-    <input type="text" id="name" name="name" placeholder="Enter snack name" required>
+    <label for="snackName">Snack Name:</label>
+    <input type="text" id="snackName" name="snackName" placeholder="Enter snack name" required>
+
+    <label for="snackSize">Description:</label>
+    <input type="text" id="snackSize" name="snackSize" placeholder="Enter snack description" required>
 
     <label for="price">Price:</label>
     <input type="number" id="price" name="price" placeholder="Enter price" required>
 
-    <label for="description">Description:</label>
-    <input type="text" id="description" name="description" placeholder="Enter snack description" required>
 
     <button type="submit">Add Snack</button>
 </form>
@@ -146,9 +147,9 @@
     document.getElementById('snack-form').addEventListener('submit', async function (event) {
         event.preventDefault();
         const snackData = {
-            name: document.getElementById('name').value,
+            snackName: document.getElementById('snackName').value,
+            snackSize: document.getElementById('snackSize').value,
             price: document.getElementById('price').value,
-            description: document.getElementById('description').value
         };
 
         try {

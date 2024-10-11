@@ -38,7 +38,7 @@ public class SnackController {
     @PostMapping("/add")
     public ResponseEntity<String> addSnack(@RequestBody Snack snack){
         snackService.addSnack(snack);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Snack added successfully");
+        return ResponseEntity.ok("Snack added successfully");
     }
 
 
