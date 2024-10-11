@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Trin 1: Hent kildekoden fra git ind i GitHub Actions VM'en
-      - uses: actions/checkout@v3@<commit-hash>
+      - uses: actions/checkout@v3
 
       # Trin 2: Installér Java i GitHub Actions VM'en
       - name: Set up JDK
-        uses: actions/setup-java@v3@<commit-hash>
+        uses: actions/setup-java@v3
         with:
           java-version: "21"
           distribution: "temurin"
