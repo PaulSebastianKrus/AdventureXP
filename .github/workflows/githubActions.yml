@@ -37,7 +37,7 @@ jobs:
       - name: Make mvnw executable
         run: chmod +x ./backend/mvnw
 
-      # Trin 4: Test koden! (I den rigtige mappe...)
+      # Trin 4: Test koden! (I den rigtige ...)
       - name: Run tests with verbose output
         working-directory: ./backend
         run: chmod +x mvnw && ./mvnw -X test
