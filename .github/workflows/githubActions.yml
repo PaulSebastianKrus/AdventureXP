@@ -39,5 +39,5 @@ jobs:
 
       # Trin 4: Test koden! (I den rigtige mappe...)
       - name: Run tests with verbose output
-        working-directory: ./backend/backend/src/test
+        working-directory: ./backend
         run: ./mvnw -X test
