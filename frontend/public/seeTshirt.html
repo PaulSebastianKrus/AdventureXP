@@ -3,39 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit T-Shirt Details</title>
+    <title>T-Shirt Details</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f0f0;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            text-align: center; /* Center all text */
         }
+
+        header {
+            background-color: #000; /* Black background */
+            color: #FFD700; /* Yellow text */
+            padding: 20px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            text-transform: uppercase; /* Uppercase for header */
+        }
+
+        header nav {
+            margin-top: 10px;
+        }
+
+        header nav a {
+            color: #FFD700; /* Yellow for navigation links */
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            font-size: 1.2em; /* Larger font size for nav links */
+        }
+
+        header nav a:hover {
+            color: #ff4757; /* Red on hover */
+        }
+
+        .back-button {
+            background-color: #ff4757; /* Red background */
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: inline-block;
+            font-size: 1.2em; /* Larger font size for button */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Button shadow */
+        }
+
+        .back-button:hover {
+            background-color: #e84343; /* Darker red on hover */
+        }
+
+        footer {
+            background-color: #000; /* Black background */
+            color: #FFD700; /* Yellow text */
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            font-size: 0.9em; /* Slightly smaller font for footer */
+        }
+
+        footer p {
+            margin: 0;
+            color: #FFD700; /* Yellow text for footer */
+        }
+
+        footer a {
+            color: #FFD700; /* Yellow for links */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
         .tshirt-details {
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: 15px;
+            margin: 20px auto; /* Center the details section */
+            max-width: 600px; /* Maximum width for details */
+            text-align: left; /* Left align text for inputs */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Shadow for details box */
         }
+
         .error {
             color: red;
             text-align: center;
+            margin-top: 10px; /* Space above error message */
         }
+
         .input-field {
             margin-bottom: 10px;
         }
+
         .input-field label {
             display: block;
             margin-bottom: 5px;
         }
+
         .editable {
             display: none;
+        }
+
+        button {
+            background-color: #000; /* Black background for buttons */
+            color: #FFD700;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer; /* Pointer cursor on hover */
+            margin-left: 10px; /* Space between elements */
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff4757; /* Darker red on hover */
         }
     </style>
 </head>
 <body>
-<h1>Edit T-Shirt Details</h1>
+<header>
+    <img src="images/375px-Adventure_Alley_logo.png" alt="Adventure Alley Logo" class="logo">
+    <h1>Adventure Center</h1>
+    <nav>
+        <a href="activity.html">Activities</a>
+        <a href="booking.html">Booking</a>
+        <a href="kiosk.html">Kiosk</a>
+        <a href="employee.html">Employees</a>
+    </nav>
+</header>
 
+<a href="kiosk.html" class="back-button">Back to Kiosk</a>
 <div class="tshirt-details" id="tshirt-details"></div>
 <div class="error" id="error-message"></div>
 
@@ -160,5 +272,8 @@
         document.getElementById('error-message').innerText = 'No T-shirt ID provided.';
     }
 </script>
+<footer>
+    <p>&copy; 2024 Adventure Center. All rights reserved.</p>
+</footer>
 </body>
 </html>

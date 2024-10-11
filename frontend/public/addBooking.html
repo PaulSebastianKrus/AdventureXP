@@ -5,29 +5,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Activity</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        form { background: #f4f4f4; padding: 20px; margin: 20px 0; }
-        label, input, select, button { display: block; margin: 10px 0; }
-        .error { color: red; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            position: relative;
+            background-color: #000;
+            color: #FFD700;
+            padding: 20px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: #FFD700;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            font-size: 1.2em;
+        }
+        nav a:hover {
+            color: #ff4757;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 40px 0 20px;
+            color: #ff4757;
+        }
+
+        .back-button {
+            background-color: #000;
+            color: #FFD700;
+            padding: 20px 40px;
+            text-decoration: none;
+            border-radius: 30px;
+            margin: 20px 0;
+            display: inline-block;
+            font-size: 1.5em;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #e84343;
+        }
+
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        input, select {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        input:focus, select:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+
+        button {
+            background-color: #000;
+            color: #FFD700;
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 20px 0;
+        }
+        button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: #000;
+            color: #FFD700;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            width: 100%;
+        }
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .centered {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .dropdown-content {
+            width: 200px; /* Slim width */
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            max-height: 200px; /* Optional: Limit height */
+            overflow-y: auto; /* Optional: Enable scrolling if items overflow */
+
+            left: 50%; /* Position it based on the center of the input field */
+            transform: translateX(-50%); /* Shift it left to center it */
+        }
+
+
+
+        .dropdown-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background-color: #ddd;
+        }
     </style>
 </head>
 <body>
+<header>
+    <img src="images/375px-Adventure_Alley_logo.png" alt="Adventure Alley Logo" class="logo">
+    <h1>Adventure Center</h1>
+    <nav>
+        <a href="activity.html">Activities</a>
+        <a href="booking.html">Booking</a>
+        <a href="kiosk.html">Kiosk</a>
+        <a href="employee.html">Employees</a>
+    </nav>
+</header>
+
 <h1>Book Activity</h1>
+<a href="booking.html" class="back-button">Back to Booking</a>
 <form id="booking-form">
     <label for="activityName">Activity:</label>
-    <input type="text" id="activityName" name="activityName" placeholder="Enter activity name" required>
+    <input type="text" id="activityName" name="activityName" required>
+    <div id="dropdown" class="dropdown-content"></div>
 
     <label for="date">Date:</label>
     <input type="date" id="date" name="date" required>
 
     <label for="time">Time:</label>
-    <input type="time" id="time" name="time" required> <!-- New time input -->
+    <input type="time" id="time" name="time" required>
 
     <label for="people">Number of People:</label>
     <input type="number" id="people" name="people" required>
 
     <label for="instructor">Instructor:</label>
     <input type="text" id="instructor" name="instructor" required>
+    <div id="instructor-dropdown" class="dropdown-content"></div>
 
     <label for="personName">Your Name:</label>
     <input type="text" id="personName" name="personName" required>
@@ -41,17 +207,75 @@
 <div id="error-message" class="error"></div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const activityInput = document.getElementById('activityName');
+        const activityDropdown = document.getElementById('dropdown');
+        const instructorInput = document.getElementById('instructor');
+        const instructorDropdown = document.getElementById('instructor-dropdown');
+
+        try {
+            const activityResponse = await fetch('http://localhost:3000/api/activity');
+            if (!activityResponse.ok) {
+                throw new Error('Failed to fetch activities');
+            }
+            const activities = await activityResponse.json();
+
+            activityInput.addEventListener('input', () => {
+                const value = activityInput.value.toLowerCase();
+                activityDropdown.innerHTML = '';
+                if (value) {
+                    const filteredActivities = activities.filter(activity => activity.activityName.toLowerCase().includes(value));
+                    filteredActivities.forEach(activity => {
+                        const item = document.createElement('div');
+                        item.className = 'dropdown-item';
+                        item.textContent = activity.activityName;
+                        item.addEventListener('click', () => {
+                            activityInput.value = activity.activityName;
+                            activityDropdown.innerHTML = '';
+                        });
+                        activityDropdown.appendChild(item);
+                    });
+                }
+            });
+
+            const instructorResponse = await fetch('http://localhost:3000/api/employee?role=Instructor');
+            if (!instructorResponse.ok) {
+                throw new Error('Failed to fetch instructors');
+            }
+            const instructors = await instructorResponse.json();
+
+            instructorInput.addEventListener('input', () => {
+                const value = instructorInput.value.toLowerCase();
+                instructorDropdown.innerHTML = '';
+                if (value) {
+                    const filteredInstructors = instructors.filter(instructor => instructor.name.toLowerCase().includes(value));
+                    filteredInstructors.forEach(instructor => {
+                        const item = document.createElement('div');
+                        item.className = 'dropdown-item';
+                        item.textContent = instructor.name;
+                        item.addEventListener('click', () => {
+                            instructorInput.value = instructor.name;
+                            instructorDropdown.innerHTML = '';
+                        });
+                        instructorDropdown.appendChild(item);
+                    });
+                }
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
     document.getElementById('booking-form').addEventListener('submit', async function (event) {
         event.preventDefault();
 
-        // Combine date and time into a single string for LocalDateTime
         const date = document.getElementById('date').value;
         const time = document.getElementById('time').value;
-        const combinedDateTime = `${date}T${time}`; // Format: YYYY-MM-DDTHH:MM
+        const combinedDateTime = `${date}T${time}`;
 
         const bookingData = {
             activityName: document.getElementById('activityName').value,
-            date: combinedDateTime, // Send combined date and time
+            date: combinedDateTime,
             people: parseInt(document.getElementById('people').value, 10),
             instructor: document.getElementById('instructor').value,
             personName: document.getElementById('personName').value,
@@ -59,7 +283,6 @@
         };
 
         try {
-            // Add new booking
             const response = await fetch('http://localhost:3000/api/booking/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -71,13 +294,16 @@
                 throw new Error(`Error: ${response.status} - ${errorData.message}`);
             }
 
-            // If the request was successful
             alert('Booking added successfully');
-            document.getElementById('booking-form').reset(); // Reset the form after successful booking
+            document.getElementById('booking-form').reset();
         } catch (error) {
             document.getElementById('error-message').innerText = error.message;
         }
     });
 </script>
+
+<footer>
+    <p>&copy; 2024 Adventure Center | <a href="privacy.html">Privacy Policy</a></p>
+</footer>
 </body>
 </html>

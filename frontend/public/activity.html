@@ -14,6 +14,7 @@
 
         /* Header styling */
         header {
+            position: relative;
             background-color: #000; /* Black background */
             color: #FFD700; /* Yellow text */
             padding: 20px 0;
@@ -23,14 +24,24 @@
             z-index: 1000;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        header .logo {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            height: 100px; /* Adjust the height as needed */
+        }
+
         header h1 {
             margin: 0;
             font-size: 2.5em;
             letter-spacing: 2px;
         }
+
         header nav {
             margin-top: 10px;
         }
+
         header nav a {
             color: #FFD700; /* Yellow for navigation links */
             margin: 0 15px;
@@ -38,6 +49,7 @@
             font-weight: bold;
             transition: color 0.3s ease;
         }
+
         header nav a:hover {
             color: #ff4757; /* Red on hover */
         }
@@ -48,6 +60,7 @@
             margin-top: 20px;
             margin-bottom: 40px;
         }
+
         .add-button {
             display: inline-block;
             background-color: #ff4757; /* Red background */
@@ -59,6 +72,7 @@
             font-size: 1.2em;
             font-weight: bold;
         }
+
         .add-button:hover {
             background-color: #e84343; /* Darker red on hover */
         }
@@ -87,6 +101,7 @@
             text-decoration: none; /* Removes underline from links */
             color: black; /* Ensures text remains visible */
         }
+
         .activity:hover {
             transform: scale(1.03);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
@@ -100,6 +115,7 @@
             border-bottom: 4px solid yellow; /* Yellow border for image */
             transition: border-bottom 0.3s ease;
         }
+
         .activity:hover img {
             border-bottom: 4px solid #ff4757; /* Red border on hover */
         }
@@ -108,11 +124,13 @@
         .activity-content {
             padding: 20px;
         }
+
         .activity h2 {
             font-size: 1.5em;
             margin-bottom: 10px;
             color: #333; /* Dark grey text for headings */
         }
+
         .activity p {
             font-size: 1em;
             margin: 5px 0;
@@ -130,6 +148,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         .delete-button:hover {
             background-color: #e84343; /* Darker red on hover */
         }
@@ -148,16 +167,19 @@
             padding: 30px 20px;
             margin-top: 40px;
         }
+
         footer p {
             margin: 0;
             font-size: 1em;
             color: #FFD700; /* Yellow text for footer */
         }
+
         footer a {
             color: #FFD700; /* Yellow for links */
             text-decoration: none;
             font-weight: bold;
         }
+
         footer a:hover {
             text-decoration: underline; /* Underline on hover */
         }
@@ -168,11 +190,13 @@
 
 <!-- Header -->
 <header>
+    <img src="images/375px-Adventure_Alley_logo.png" alt="Adventure Alley Logo" class="logo">
     <h1>Adventure Center</h1>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="activities.html">Activities</a>
-        <a href="contact.html">Contact</a>
+        <a href="activity.html">Activities</a>
+        <a href="booking.html">Booking</a>
+        <a href="kiosk.html">Kiosk</a>
+        <a href="employee.html">Employees</a>
     </nav>
 </header>
 
@@ -192,95 +216,96 @@
 
 <script>
     async function fetchActivities() {
-        try {
-            const response = await fetch('http://localhost:3000/api/activity');
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            const activities = await response.json();
-            displayActivities(activities);
-        } catch (error) {
-            document.getElementById('error-message').innerText = 'Failed to load activities: ' + error.message;
+    try {
+        const response = await fetch('http://localhost:3000/api/activity');
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
         }
+        const activities = await response.json();
+        displayActivities(activities);
+    } catch (error) {
+        document.getElementById('error-message').innerText = 'Failed to load activities: ' + error.message;
     }
+}
 
-    function confirmDeleteActivity(activityId) {
-        const userConfirmed = confirm('Are you sure you want to delete this activity?');
-        if (userConfirmed) {
-            deleteActivity(activityId);
+function confirmDeleteActivity(activityId) {
+    const userConfirmed = confirm('Are you sure you want to delete this activity?');
+    if (userConfirmed) {
+        deleteActivity(activityId);
+    }
+}
+
+async function deleteActivity(activityId) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/activity/${activityId}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            alert('Activity deleted successfully!');
+            fetchActivities(); // Refresh the activities list
+        } else {
+            throw new Error('Failed to delete activity: ' + response.statusText);
         }
+    } catch (error) {
+        document.getElementById('error-message').innerText = 'Failed to delete activity: ' + error.message;
     }
+}
 
-    async function deleteActivity(activityId) {
-        try {
-            const response = await fetch(`http://localhost:3000/api/activity/${activityId}`, {
-                method: 'DELETE'
-            });
+function displayActivities(activities) {
+    const activitiesContainer = document.getElementById('activities-container');
+    activitiesContainer.innerHTML = ''; // Clear previous content
 
-            if (response.ok) {
-                alert('Activity deleted successfully!');
-                fetchActivities(); // Refresh the activities list
-            } else {
-                throw new Error('Failed to delete activity: ' + response.statusText);
-            }
-        } catch (error) {
-            document.getElementById('error-message').innerText = 'Failed to delete activity: ' + error.message;
-        }
-    }
+    activities.forEach(activity => {
+        const activityDiv = document.createElement('a'); // Create an anchor tag for the activity
+        activityDiv.classList.add('activity');
+        activityDiv.href = `seeActivity.html?activity_id=${activity.activity_id}`; // Link for details page
 
-    function displayActivities(activities) {
-        const activitiesContainer = document.getElementById('activities-container');
-        activitiesContainer.innerHTML = ''; // Clear previous content
+        // Map for activity images
+        const activityImageMap = {
+            'sky diving': 'images/skydiving.jpg',
+            'rock climbing': 'images/rockclimbing.jpg',
+            'surfing': 'images/surfing.jpg',
+            'trampolin park': 'images/trampolinpark.jpg',
+            'bungee jumping': 'images/bungeejumping.jpg',
+        };
 
-        activities.forEach(activity => {
-            const activityDiv = document.createElement('a'); // Create an anchor tag for the activity
-            activityDiv.classList.add('activity');
-            activityDiv.href = `seeActivity.html?activity_id=${activity.activity_id}`; // Link for details page
+        const sanitizedActivityName = activity.activityName.trim().toLowerCase();
+        let imagePath = activityImageMap[sanitizedActivityName] || 'images/default.jpg'; // Use default image if not found
 
-            // Map for activity images
-            const activityImageMap = {
-                'sky diving': 'images/skydiving.jpg',
-                'rock climbing': 'images/rockclimbing.jpg',
-                'surfing': 'images/surfing.jpg',
-                'trampolin park': 'images/trampolinpark.jpg',
-                'bungee jumping': 'images/bungeejumping.jpg',
-            };
-
-            const sanitizedActivityName = activity.activityName.trim().toLowerCase();
-            let imagePath = activityImageMap[sanitizedActivityName] || 'images/default.jpg'; // Use default image if not found
-
-            // Set content of activityDiv
-            activityDiv.innerHTML = `
+        // Set content of activityDiv
+        activityDiv.innerHTML = `
             <img src="${imagePath}" alt="${activity.activityName} Image">
             <div class="activity-content">
                 <h2>${activity.activityName}</h2>
                 <p><strong>Description:</strong> ${activity.description}</p>
-                <p><strong>Weight Limit:</strong> ${activity.weightLimit} kg</p>
-                <p><strong>Age Limit:</strong> ${activity.ageLimit} years</p>
+                <p><strong>Maximum weight Limit:</strong> ${activity.weightLimit} kg</p>
+                <p><strong>Minimum age Requirement:</strong> ${activity.ageLimit} years</p>
                 <p><strong>Season:</strong> ${activity.season}</p>
-                <p><strong>Material Name:</strong> ${activity.materialName}</p>
-                <p><strong>Amount:</strong> ${activity.amount}</p>
+                <p><strong>Materials needed from home:</strong> ${activity.materialName}</p>
+                <p><strong>Activity Duration:</strong> ${activity.duration}</p>
             </div>
         `;
 
-            // Create delete button
-            const deleteButton = document.createElement('button');
-            deleteButton.classList.add('delete-button');
-            deleteButton.innerText = 'Delete';
-            deleteButton.onclick = (event) => {
-                event.stopPropagation();
-                event.preventDefault();
-                confirmDeleteActivity(activity.activity_id);
-            };
+        // Create delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('delete-button');
+        deleteButton.innerText = 'Delete';
+        deleteButton.onclick = (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+            confirmDeleteActivity(activity.activity_id);
+        };
 
-            // Append the delete button at the end
-            activityDiv.appendChild(deleteButton);
-            activitiesContainer.appendChild(activityDiv);
-        });
-    }
+        // Append the delete button at the end
+        activityDiv.appendChild(deleteButton);
+        activitiesContainer.appendChild(activityDiv);
+    });
+}
 
-    // Fetch activities on page load
-    fetchActivities();
+// Fetch activities on page load
+fetchActivities();
+
 </script>
 
 </body>

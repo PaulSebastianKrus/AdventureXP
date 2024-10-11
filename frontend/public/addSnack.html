@@ -5,23 +5,138 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Snack</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        form { background: #f4f4f4; padding: 20px; margin: 20px 0; }
-        label, input, button { display: block; margin: 10px 0; }
-        .error { color: red; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #000;
+            color: #FFD700;
+            padding: 20px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: #FFD700;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            font-size: 1.2em;
+        }
+        nav a:hover {
+            color: #ff4757;
+        }
+        h1 {
+            font-size: 2em;
+            margin: 40px 0 20px;
+            color: #ff4757;
+        }
+        .back-button {
+            background-color: #000;
+            color: #FFD700;
+            padding: 20px 40px;
+            text-decoration: none;
+            border-radius: 30px;
+            margin: 20px 0;
+            display: inline-block;
+            font-size: 1.5em;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #e84343;
+        }
+        form {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        input:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+        button {
+            background-color: #000;
+            color: #FFD700;
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin: 20px 0;
+        }
+        button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #000;
+            color: #FFD700;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
+<header>
+    <img src="images/375px-Adventure_Alley_logo.png" alt="Adventure Alley Logo" class="logo">
+    <h1>Adventure Center</h1>
+    <nav>
+        <a href="activity.html">Activities</a>
+        <a href="booking.html">Booking</a>
+        <a href="kiosk.html">Kiosk</a>
+        <a href="employee.html">Employees</a>
+    </nav>
+</header>
 <h1>Add New Snack</h1>
+<a href="kiosk.html" class="back-button">Back to Kiosk</a>
 <form id="snack-form">
     <label for="snackName">Snack Name:</label>
     <input type="text" id="snackName" name="snackName" placeholder="Enter snack name" required>
 
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" step="0.01" placeholder="Enter price" required>
+    <label for="snackSize">Description:</label>
+    <input type="text" id="snackSize" name="snackSize" placeholder="Enter snack description" required>
 
-    <label for="snackSize">Size:</label>
-    <input type="text" id="snackSize" name="snackSize" placeholder="Enter size (e.g., small, medium, large)" required>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" placeholder="Enter price" required>
+
 
     <button type="submit">Add Snack</button>
 </form>
@@ -31,16 +146,13 @@
 <script>
     document.getElementById('snack-form').addEventListener('submit', async function (event) {
         event.preventDefault();
-
-        // Capture form values into a snackData object
         const snackData = {
             snackName: document.getElementById('snackName').value,
-            price: parseFloat(document.getElementById('price').value),
-            snackSize: document.getElementById('snackSize').value
+            snackSize: document.getElementById('snackSize').value,
+            price: document.getElementById('price').value,
         };
 
         try {
-            // Send POST request to add new snack
             const response = await fetch('http://localhost:3000/api/snack/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -52,13 +164,16 @@
                 throw new Error(`Error: ${response.status} - ${errorData.message}`);
             }
 
-            // If the request was successful
             alert('Snack added successfully');
-            document.getElementById('snack-form').reset(); // Reset the form after successful addition
+            document.getElementById('snack-form').reset();
         } catch (error) {
             document.getElementById('error-message').innerText = error.message;
         }
     });
 </script>
+
+<footer>
+    <p>&copy; 2024 Adventure Center | <a href="privacy.html">Privacy Policy</a></p>
+</footer>
 </body>
 </html>

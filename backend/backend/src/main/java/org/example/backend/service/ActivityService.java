@@ -29,21 +29,6 @@ public void deleteActivity(Long activity_id) {
         return activityRepository.updateActivity(activity);
     }
 
-    public Activity updateActivityName(Activity activity) {
-    return activityRepository.updateActivityName(activity);
-    }
-    public Activity updateActivityDescription(Activity activity) {
-    return activityRepository.updateActivityDescription(activity);
-    }
-    public Activity updateActivityWeightLimit(Activity activity) {
-    return activityRepository.updateActivityWeightLimit(activity);
-    }
-    public Activity updateActivityAgeLimit(Activity activity) {
-    return activityRepository.updateActivityAgeLimit(activity);
-    }
-    public Activity updateActivitySeason(Activity activity) {
-    return activityRepository.updateActivitySeason(activity);
-    }
     public Activity getActivityById(Long id) {
         return activityRepository.getActivityById(id);
     }

@@ -8,23 +8,20 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Repository
 public class ActivityRepository {
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-@Autowired
-private JdbcTemplate jdbcTemplate;
-
-public ActivityRepository(JdbcTemplate jdbcTemplate){
-    this.jdbcTemplate = jdbcTemplate;
-}
-
-    public void addActivity(Activity activity) {
-        String insertQuery = "INSERT INTO activities (name, description, weightlimit, agelimit, season, materialname, amount) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(insertQuery, activity.getActivityName(), activity.getDescription(), activity.getWeightLimit(), activity.getAgeLimit(), activity.getSeason(),activity.getMaterialName(),activity.getAmount());
+    public ActivityRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
+    public void addActivity(Activity activity) {
+        String insertQuery = "INSERT INTO activities (name, description, weightlimit, agelimit, season, materialname, duration) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(insertQuery, activity.getActivityName(), activity.getDescription(), activity.getWeightLimit(), activity.getAgeLimit(), activity.getSeason(), activity.getMaterialName(), activity.getDuration());
+    }
 
     public void deleteActivity(Long activity_id) {
         String query = "DELETE FROM activities WHERE activity_id = ?";
@@ -42,8 +39,7 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
             activity.setAgeLimit(rs.getLong("agelimit"));
             activity.setSeason(rs.getString("season"));
             activity.setMaterialName(rs.getString("materialname"));
-            activity.setAmount(rs.getLong("amount"));
-
+            activity.setDuration(rs.getTime("duration"));
             return activity;
         });
     }
@@ -59,57 +55,10 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
             activity.setAgeLimit(rs.getLong("agelimit"));
             activity.setSeason(rs.getString("season"));
             activity.setMaterialName(rs.getString("materialname"));
-            activity.setAmount(rs.getLong("amount"));
-
+            activity.setDuration(rs.getTime("duration"));
             return activity;
         });
     }
-
-
-    public Activity updateActivityName(Activity activity) {
-        String query = "UPDATE activities SET name = ?, WHERE = activity_id";
-        int rowsUpdated = jdbcTemplate.update(query, activity.getActivityName(), activity.getActivity_id());
-        if (rowsUpdated> 0) {
-            return activity;
-        }
-        return null;
-    }
-
-    public Activity updateActivityDescription(Activity activity) {
-        String query = "UPDATE activities SET description = ?, WHERE = activity_id";
-        int rowsUpdated = jdbcTemplate.update(query, activity.getDescription(), activity.getActivity_id());
-        if (rowsUpdated> 0) {
-            return activity;
-        }
-        return null;
-    }
-
-    public Activity updateActivityWeightLimit(Activity activity) {
-        String query = "UPDATE activities SET weightlimit = ?, WHERE = activity_id";
-        int rowsUpdated = jdbcTemplate.update(query, activity.getWeightLimit(), activity.getActivity_id());
-        if (rowsUpdated> 0) {
-            return activity;
-        }
-        return null;
-    }
-    public Activity updateActivityAgeLimit(Activity activity) {
-        String query = "UPDATE activities SET agelimit = ?, WHERE = activity_id";
-        int rowsUpdated = jdbcTemplate.update(query, activity.getAgeLimit(), activity.getActivity_id());
-        if (rowsUpdated> 0) {
-            return activity;
-        }
-        return null;
-    }
-    public Activity updateActivitySeason(Activity activity) {
-        String query = "UPDATE activities SET season = ?, WHERE = activity_id";
-        int rowsUpdated = jdbcTemplate.update(query, activity.getSeason(), activity.getActivity_id());
-        if (rowsUpdated> 0) {
-            return activity;
-        }
-        return null;
-    }
-
-
 
     public Activity updateActivity(Activity activity) {
         StringBuilder query = new StringBuilder("UPDATE activities SET ");
@@ -135,16 +84,14 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
             query.append("season = ?, ");
             parameters.add(activity.getSeason());
         }
-        if(activity.getMaterialName()!=null){
+        if (activity.getMaterialName() != null) {
             query.append("materialname = ?, ");
             parameters.add(activity.getMaterialName());
         }
-         if(activity.getAmount()!=null){
-            query.append("amount = ?, ");
-            parameters.add(activity.getAmount());
+        if (activity.getDuration() != null) {
+            query.append("duration = ?, ");
+            parameters.add(activity.getDuration());
         }
-
-
 
         if (!parameters.isEmpty()) {
             query.setLength(query.length() - 2); // Remove last comma and space
@@ -158,7 +105,4 @@ public ActivityRepository(JdbcTemplate jdbcTemplate){
         }
         return null;
     }
-
-
-
 }

@@ -6,34 +6,182 @@
     <title>Activity Details</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9; /* Light background */
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            text-align: center; /* Center all text */
         }
-        .activity-details {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-        }
-        .error {
-            color: red;
+
+        header {
+            background-color: #000; /* Black background */
+            color: #FFD700; /* Yellow text */
+            padding: 20px 0;
             text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            text-transform: uppercase; /* Uppercase for header */
+        }
+
+        header nav {
+            margin-top: 10px;
+        }
+
+        header nav a {
+            color: #FFD700; /* Yellow for navigation links */
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            font-size: 1.2em; /* Larger font size for nav links */
+        }
+
+        header nav a:hover {
+            color: #ff4757; /* Red on hover */
+        }
+
+        .back-button {
+            background-color: #ff4757; /* Red background */
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: inline-block;
+            font-size: 1.2em; /* Larger font size for button */
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Button shadow */
+        }
+
+        .back-button:hover {
+            background-color: #e84343; /* Darker red on hover */
+        }
+
+        footer {
+            background-color: #000; /* Black background */
+            color: #FFD700; /* Yellow text */
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            font-size: 0.9em; /* Slightly smaller font for footer */
+        }
+
+        footer p {
+            margin: 0;
+            color: #FFD700; /* Yellow text for footer */
+        }
+
+        footer a {
+            color: #FFD700; /* Yellow for links */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        .activity-details {
+            margin: 40px auto; /* Centered with more margin */
+            padding: 20px;
+            background-color: white; /* White background for details */
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 600px; /* Increase width for more space */
+            text-align: left; /* Left align text for inputs */
+        }
+
         .input-field {
-            margin-bottom: 10px;
+            margin: 15px 0; /* Space between fields */
         }
+
         .input-field label {
-            display: block;
-            margin-bottom: 5px;
+            display: block; /* Block display for labels */
+            margin-bottom: 5px; /* Space below label */
+            font-weight: bold; /* Bold labels */
+            color: #333; /* Darker color for better contrast */
         }
+
+        .input-field input, .input-field textarea {
+            width: 100%; /* Full width inputs */
+            padding: 10px;
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 4px;
+            transition: border-color 0.3s ease; /* Smooth transition */
+        }
+
+        .input-field input:focus, .input-field textarea:focus {
+            border-color: #ff4757; /* Change border color on focus */
+            outline: none; /* Remove default outline */
+        }
+
+        .error {
+            color: red; /* Red for error messages */
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em; /* Larger font size for error messages */
+        }
+
         .editable {
-            display: none;
+            display: none; /* Hide editable fields by default */
+        }
+
+        button {
+            background-color: #000; /* Blue background for buttons */
+            color: #FFD700;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer; /* Pointer cursor on hover */
+            margin-left: 10px; /* Space between elements */
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff4757; /* Darker blue on hover */
+        }
+
+        /* Responsive design adjustments */
+        @media (max-width: 600px) {
+            .back-button {
+                width: 90%; /* Full width on smaller screens */
+            }
+
+            .activity-details {
+                padding: 15px; /* Less padding on small screens */
+            }
+
+            header nav a {
+                font-size: 1em; /* Smaller font size for nav links */
+            }
+
+            header h1 {
+                font-size: 2em; /* Smaller header size */
+            }
         }
     </style>
 </head>
 <body>
+<header>
+    <img src="images/375px-Adventure_Alley_logo.png" alt="Adventure Alley Logo" class="logo">
+    <h1>Adventure Center</h1>
+    <nav>
+        <a href="activity.html">Activities</a>
+        <a href="booking.html">Booking</a>
+        <a href="kiosk.html">Kiosk</a>
+        <a href="employee.html">Employees</a>
+    </nav>
+</header>
+
+<a href="activity.html" class="back-button">Back to Activities</a>
 <div class="activity-details" id="activity-details"></div>
 <div class="error" id="error-message"></div>
 
@@ -58,74 +206,33 @@
     function displayActivityDetails(activity) {
         const detailsContainer = document.getElementById('activity-details');
         detailsContainer.innerHTML = `
-    <h2>Edit Activity Details</h2>
-    <div class="input-field">
-        <label for="activityName">Activity Name:</label>
-        <div>
-            <span id="activityNameDisplay">${activity.activityName}</span>
-            <button onclick="toggleEdit('activityName')">Edit</button>
-        </div>
-        <input type="text" id="activityName" class="editable" value="${activity.activityName}" style="display:none;">
-        <button onclick="saveChanges('activityName')" class="editable" style="display:none;">Save</button>
-    </div>
-    <div class="input-field">
-        <label for="description">Description:</label>
-        <div>
-            <span id="descriptionDisplay">${activity.description}</span>
-            <button onclick="toggleEdit('description')">Edit</button>
-        </div>
-        <textarea id="description" class="editable" style="display:none;">${activity.description}</textarea>
-        <button onclick="saveChanges('description')" class="editable" style="display:none;">Save</button>
-    </div>
-    <div class="input-field">
-        <label for="weightLimit">Weight Limit (kg):</label>
-        <div>
-            <span id="weightLimitDisplay">${activity.weightLimit}</span>
-            <button onclick="toggleEdit('weightLimit')">Edit</button>
-        </div>
-        <input type="number" id="weightLimit" class="editable" value="${activity.weightLimit}" style="display:none;">
-        <button onclick="saveChanges('weightLimit')" class="editable" style="display:none;">Save</button>
-    </div>
-    <div class="input-field">
-        <label for="ageLimit">Age Limit (years):</label>
-        <div>
-            <span id="ageLimitDisplay">${activity.ageLimit}</span>
-            <button onclick="toggleEdit('ageLimit')">Edit</button>
-        </div>
-        <input type="number" id="ageLimit" class="editable" value="${activity.ageLimit}" style="display:none;">
-        <button onclick="saveChanges('ageLimit')" class="editable" style="display:none;">Save</button>
-    </div>
-    <div class="input-field">
-        <label for="season">Season:</label>
-        <div>
-            <span id="seasonDisplay">${activity.season}</span>
-            <button onclick="toggleEdit('season')">Edit</button>
-        </div>
-        <input type="text" id="season" class="editable" value="${activity.season}" style="display:none;">
-        <button onclick="saveChanges('season')" class="editable" style="display:none;">Save</button>
-    </div>
-    <div class="input-field">
-        <label for="materialName">Material Name:</label>
-        <div>
-            <span id="materialNameDisplay">${activity.materialName}</span>
-            <button onclick="toggleEdit('materialName')">Edit</button>
-        </div>
-        <input type="text" id="materialName" class="editable" value="${activity.materialName}" style="display:none;">
-        <button onclick="saveChanges('materialName')" class="editable" style="display:none;">Save</button>
-    </div>
-    <div class="input-field">
-        <label for="amount">Amount:</label>
-        <div>
-            <span id="amountDisplay">${activity.amount}</span>
-            <button onclick="toggleEdit('amount')">Edit</button>
-        </div>
-        <input type="number" id="amount" class="editable" value="${activity.amount}" style="display:none;">
-        <button onclick="saveChanges('amount')" class="editable" style="display:none;">Save</button>
-    </div>
-    `;
+            <h2>Edit Activity Details</h2>
+            ${createInputField('Activity Name', 'activityName', activity.activityName)}
+            ${createInputField('Description', 'description', activity.description, true)}
+            ${createInputField('Weight Limit (kg)', 'weightLimit', activity.weightLimit)}
+            ${createInputField('Age Limit (years)', 'ageLimit', activity.ageLimit)}
+            ${createInputField('Season', 'season', activity.season)}
+            ${createInputField('Material Name', 'materialName', activity.materialName)}
+            ${createInputField('Amount', 'amount', activity.amount)}
+        `;
     }
 
-
+    function createInputField(label, fieldId, value, isTextArea = false) {
+        return `
+            <div class="input-field">
+                <label for="${fieldId}">${label}:</label>
+                <div>
+                    <span id="${fieldId}Display">${value}</span>
+                    <button onclick="toggleEdit('${fieldId}')">Edit</button>
+                </div>
+                ${isTextArea
+            ? `<textarea id="${fieldId}" class="editable">${value}</textarea>`
+            : `<input type="${fieldId === 'amount' || fieldId === 'weightLimit' || fieldId === 'ageLimit' ? 'number' : 'text'}" id="${fieldId}" class="editable" value="${value}">`
+        }
+                <button onclick="saveChanges('${fieldId}')" class="editable">Save</button>
+            </div>
+        `;
+    }
 
     function toggleEdit(field) {
         const displayElement = document.getElementById(`${field}Display`);
@@ -142,7 +249,6 @@
             console.error(`One of the elements is null: ${field}Display, ${field}, or save button`);
         }
     }
-
 
     async function saveChanges(field) {
         const updatedValue = document.getElementById(field).value;
@@ -181,7 +287,6 @@
         }
     }
 
-
     // Extract activity_id from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const activityId = urlParams.get('activity_id');
@@ -193,5 +298,9 @@
         document.getElementById('error-message').innerText = 'No activity ID provided.';
     }
 </script>
+<footer>
+    <p>&copy; 2024 Adventure Center. All Rights Reserved.</p>
+    <p><a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+</footer>
 </body>
 </html>
