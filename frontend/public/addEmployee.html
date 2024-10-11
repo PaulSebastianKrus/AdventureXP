@@ -10,6 +10,11 @@
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             text-align: center;
         }
         header {
@@ -21,6 +26,7 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
         header h1 {
             margin: 0;
@@ -67,8 +73,9 @@
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             max-width: 500px;
+            width: 100%;
         }
-        input {
+        input, select {
             width: 90%;
             padding: 10px;
             margin: 10px 0;
@@ -76,7 +83,7 @@
             border-radius: 5px;
             font-size: 1em;
         }
-        input:focus {
+        input:focus, select:focus {
             border-color: #4a90e2;
             outline: none;
         }
@@ -101,6 +108,7 @@
             text-align: center;
             padding: 30px 20px;
             margin-top: 40px;
+            width: 100%;
         }
         footer p {
             margin: 0;
@@ -112,6 +120,24 @@
             margin: 20px 0;
             font-size: 1.2em;
         }
+        .centered {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        select {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            background-color: white;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+
     </style>
 </head>
 <body>
@@ -132,7 +158,12 @@
     <input type="text" id="name" name="name" placeholder="Enter employee name" required>
 
     <label for="role">Role:</label>
-    <input type="text" id="role" name="role" placeholder="Enter the employee's role" required>
+    <div class="centered">
+        <select id="role" name="role" required>
+            <option value="Instructor">Instructor</option>
+            <option value="Administrator">Administrator</option>
+        </select>
+    </div>
 
     <label for="activities">Activities:</label>
     <input type="text" id="activities" name="activities" placeholder="Enter employee activities" required>
