@@ -12,17 +12,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the code from git into the GitHub Actions VM
       - uses: actions/checkout@v3
 
-      # Step 2: Set up JDK in the GitHub Actions VM
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: "21"
           distribution: "temurin"
 
-      # Step 2.5: Cache Maven dependencies and .class files
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -33,12 +30,9 @@ jobs:
           restore-keys: |
             maven-${{ runner.os }}
 
-      # Step 3: Make mvnw executable
       - name: Make mvnw executable
-        working-directory: ./backend
-        run: chmod +x mvnw
+        run: chmod +x ./backend/backend/mvnw
 
-      # Trin 4: Test koden! (I den rigtige ...)
       - name: Run tests with verbose output
-        working-directory: ./backend/backend  # Update this line
+        working-directory: ./backend/backend  # Adjusted path
         run: chmod +x mvnw && ./mvnw -X test
