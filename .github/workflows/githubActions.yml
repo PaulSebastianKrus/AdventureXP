@@ -12,17 +12,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # Trin 1: Hent kildekoden fra git ind i GitHub Actions VM'en
+      # Step 1: Checkout the code from git into the GitHub Actions VM
       - uses: actions/checkout@v3
 
-      # Trin 2: Installér Java i GitHub Actions VM'en
+      # Step 2: Set up JDK in the GitHub Actions VM
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: "21"
           distribution: "temurin"
 
-      # Trin 2.5: Gem 3rd-party dependencies + .class-filer fra sidst
+      # Step 2.5: Cache Maven dependencies and .class files
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -33,12 +33,12 @@ jobs:
           restore-keys: |
             maven-${{ runner.os }}
 
-      # Trin 3: Make mvnw executable
+      # Step 3: Make mvnw executable
       - name: Make mvnw executable
-        run: chmod +x ./backend/mvnw
+        working-directory: ./backend
+        run: chmod +x mvnw
 
-      # Trin 4: Test koden! (I den rigtige ...)
+      # Step 4: Run tests with verbose output
       - name: Run tests with verbose output
         working-directory: ./backend
-        run: chmod +x mvnw && ./mvnw -X test
-
+        run: ./mvnw -X test
