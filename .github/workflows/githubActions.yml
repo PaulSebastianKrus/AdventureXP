@@ -38,7 +38,7 @@ jobs:
         working-directory: ./backend
         run: chmod +x mvnw
 
-      # Step 4: Run tests with verbose output
+      # Trin 4: Test koden! (I den rigtige ...)
       - name: Run tests with verbose output
-        working-directory: ./backend
-        run: ./mvnw -X test
+        working-directory: ./backend/backend  # Update this line
+        run: chmod +x mvnw && ./mvnw -X test
