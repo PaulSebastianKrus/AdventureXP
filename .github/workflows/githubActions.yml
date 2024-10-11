@@ -38,6 +38,6 @@ jobs:
         run: chmod +x ./backend/mvnw
 
       # Trin 4: Test koden! (I den rigtige mappe...)
-      - name: Run tests
+      - name: Run tests with verbose output
         working-directory: ./backend
-        run: ./mvnw test
+        run: ./mvnw -X test
