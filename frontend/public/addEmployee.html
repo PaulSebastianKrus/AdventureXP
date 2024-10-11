@@ -7,19 +7,20 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f9f9f9; /* Light background color for the body */
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh; /* Ensure the body covers the full viewport height */
             text-align: center;
         }
+
         header {
-            background-color: #000;
-            color: #FFD700;
+            background-color: #000; /* Black background color for the header */
+            color: #FFD700; /* Yellow text color */
             padding: 20px 0;
             text-align: center;
             position: sticky;
@@ -28,14 +29,17 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
         }
+
         header h1 {
             margin: 0;
             font-size: 2.5em;
             letter-spacing: 2px;
         }
+
         nav {
             margin-top: 10px;
         }
+
         nav a {
             color: #FFD700;
             margin: 0 15px;
@@ -44,14 +48,17 @@
             transition: color 0.3s ease;
             font-size: 1.2em;
         }
+
         nav a:hover {
             color: #ff4757;
         }
+
         h1 {
             font-size: 2em;
             margin: 40px 0 20px;
             color: #ff4757;
         }
+
         .back-button {
             background-color: #000;
             color: #FFD700;
@@ -63,9 +70,11 @@
             font-size: 1.5em;
             transition: background-color 0.3s ease;
         }
+
         .back-button:hover {
             background-color: #e84343;
         }
+
         form {
             margin: 20px auto;
             padding: 20px;
@@ -75,6 +84,7 @@
             max-width: 500px;
             width: 100%;
         }
+
         input, select {
             width: 90%;
             padding: 10px;
@@ -83,10 +93,12 @@
             border-radius: 5px;
             font-size: 1em;
         }
+
         input:focus, select:focus {
             border-color: #4a90e2;
             outline: none;
         }
+
         button {
             background-color: #000;
             color: #FFD700;
@@ -98,10 +110,12 @@
             transition: background-color 0.3s ease, transform 0.3s ease;
             margin: 20px 0;
         }
+
         button:hover {
             background-color: #218838;
             transform: scale(1.05);
         }
+
         footer {
             background-color: #000;
             color: #FFD700;
@@ -110,16 +124,19 @@
             margin-top: 40px;
             width: 100%;
         }
+
         footer p {
             margin: 0;
             font-size: 1em;
         }
+
         .error {
             color: red;
             text-align: center;
             margin: 20px 0;
             font-size: 1.2em;
         }
+
         .centered {
             display: flex;
             justify-content: center;
@@ -137,11 +154,11 @@
             font-size: 1em;
         }
 
-
     </style>
 </head>
 <body>
 <header>
+    <img src="images/375px-Adventure_Alley_logo.png" alt="Adventure Alley Logo" class="logo">
     <h1>Adventure Center</h1>
     <nav>
         <a href="activity.html">Activities</a>
