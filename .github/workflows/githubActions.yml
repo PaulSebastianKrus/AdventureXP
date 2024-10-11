@@ -33,7 +33,11 @@ jobs:
           restore-keys: |
             maven-${{ runner.os }}
 
-      # Trin 3: Test koden! (I den rigtige mappe...)
+      # Trin 3: Make mvnw executable
+      - name: Make mvnw executable
+        run: chmod +x ./backend/mvnw
+
+      # Trin 4: Test koden! (I den rigtige mappe...)
       - name: Run tests
         working-directory: ./backend
         run: ./mvnw test
