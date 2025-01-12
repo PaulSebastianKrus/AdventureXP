@@ -13,8 +13,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@0670d37ba1d09fecf5018ace93a4e5727f7b5772
-
+      - uses: actions/checkout@v2
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
