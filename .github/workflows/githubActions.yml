@@ -7,13 +7,13 @@ on:
   pull_request:
     branches:
       - main
-  
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@387e1a11337ff303066b796df7eabf2224e70339
+      - uses: actions/checkout@7290a4f9fe74804f3d7b1b00ec8b2b4baa3978ad
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
